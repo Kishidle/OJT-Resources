@@ -1,0 +1,17 @@
+package com.example.user.mpandroidcharttest;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.github.mikephil.charting.charts.PieChart;
+
+public class ChartActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chart);
+
+        PieChart pie = (PieChart) findViewById(R.id.piechart);
+    }
+}
