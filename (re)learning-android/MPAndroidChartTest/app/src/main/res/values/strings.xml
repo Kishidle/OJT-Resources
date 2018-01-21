@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MPAndroidChartTest</string>
+    <string-array name="test_array">
+        <item>test</item>
+        <item>test2</item>
+        <item>test3</item>
+    </string-array>
 </resources>
