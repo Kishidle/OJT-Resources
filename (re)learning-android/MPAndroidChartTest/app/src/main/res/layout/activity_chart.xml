@@ -30,13 +30,17 @@
 
         <Spinner
             android:id="@+id/chart1_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="fill_parent"
+            android:textSize="14pt"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
 
         <Spinner
             android:id="@+id/chart2_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="fill_parent"
+            android:textSize="14pt"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
     </LinearLayout>
 
 
