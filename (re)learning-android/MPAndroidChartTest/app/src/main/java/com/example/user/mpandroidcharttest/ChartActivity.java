@@ -19,14 +19,18 @@ public class ChartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
-        mPie1 = (PieChart) findViewById(R.id.piechart1);
-        mPie2 = (PieChart) findViewById(R.id.piechart2);
+        mPie1=(PieChart) findViewById(R.id.piechart1);
+        mPie2=(PieChart) findViewById(R.id.piechart2);
 
-        mSpin1 = (Spinner) findViewById(R.id.chart1_spinner);
-        mSpin2 = (Spinner) findViewById(R.id.chart2_spinner);
+        mSpin1=(Spinner) findViewById(R.id.chart1_spinner);
+        mSpin2=(Spinner) findViewById(R.id.chart2_spinner);
+
+
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpin1.setAdapter(adapter);
+
 
     }
 }
