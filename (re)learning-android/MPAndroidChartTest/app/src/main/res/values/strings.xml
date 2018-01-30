@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">MPAndroidChartTest</string>
     <string-array name="test_array">
-        <item>test</item>
-        <item>test2</item>
-        <item>test3</item>
+        <item>Child ID</item>
+        <item>Region</item>
+        <item>Province</item>
+        <item>Municipality</item>
+        <item>Barangay</item>
+        <item>Gender</item>
+        <item>Age</item>
+        <item>Weight</item>
+        <item>Height</item>
+        <item>BMI</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_text">Update charts</string>
 </resources>
