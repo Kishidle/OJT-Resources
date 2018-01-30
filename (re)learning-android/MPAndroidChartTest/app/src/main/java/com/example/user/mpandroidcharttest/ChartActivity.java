@@ -1,7 +1,9 @@
 package com.example.user.mpandroidcharttest;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,9 +13,13 @@ import android.widget.Spinner;
 import com.example.user.mpandroidcharttest.Model.Child;
 import com.example.user.mpandroidcharttest.Model.ValueCounter;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChartActivity extends AppCompatActivity {
 
@@ -80,7 +86,9 @@ public class ChartActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpin1.setAdapter(adapter);
+        mSpin2.setAdapter(adapter);
 
+        createData();
 
 
 
@@ -111,11 +119,15 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void updateCharts(String mFilter, PieChart mPie, PieEntry pieEntry, ArrayList<Child> childList){
+    public void updateChartButton(View view){
         //TODO create switch statements for mFilter
+        //TODO check mPieChart, I think that's why it's not working. not using the actual pie chart in the layout
+        PieChart pieChart = createPieChart();
+        Log.d("test", mFilter1);
 
-        switch(mFilter){
 
+        //turn this into a function?
+        switch(mFilter1){
             case "Child ID":  break;
             case "Region": break;
             case "Province": break;
@@ -124,18 +136,97 @@ public class ChartActivity extends AppCompatActivity {
             case "Gender": break;
             case "Age":
                 ValueCounter valueCounter = new ValueCounter(childList);
-
                 break;
             case "Weight": break;
             case "Height": break;
             case "BMI":
                 ValueCounter bmiCounter = new ValueCounter(childList);
                 bmiCounter.setValBMI();
-                //create piechart data
+                int[] bmiCount = bmiCounter.getValBMI();
 
+                //create PieChart data
+
+                String[] test = {"test1", "test2", "test3", "test4"};
+                PieData data = populatePie(pieChart, bmiCount, test); //or do this in populatePie?
+                pieChart.setData(data);
+                Log.d("test2", "did it go here?");
                 break;
         }
+        pieChart.invalidate();
 
     }
 
+    private PieChart createPieChart(){
+
+        PieChart pieChart = new PieChart(this);
+
+        // configure pie chart
+        pieChart.setUsePercentValues(true);
+
+        // enable hole and configure
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setHoleRadius(7);
+        pieChart.setTransparentCircleRadius(100);
+
+        // enable rotation of the chart by touch
+        pieChart.setRotationAngle(0);
+        pieChart.setRotationEnabled(true);
+
+        // set a chart value selected listener
+        //pieChart.setOnChartValueSelectedListener(getOnChartValueSelectedListener());
+
+        // customize legends
+        Legend l = pieChart.getLegend();
+        l.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
+        l.setWordWrapEnabled(true);
+        //l.setTextSize(R.dimen.context_text_size);
+        l.setTextColor(Color.WHITE);
+        l.setXEntrySpace(7);
+        l.setYEntrySpace(5);
+
+        return pieChart;
+
+
+
+    }
+
+    private PieData populatePie(PieChart pieChart, int[] valueCount, String[] valueLabel){
+
+        List<PieEntry> entries = new ArrayList<>();
+
+
+        //compute values for PieChart first
+        ArrayList<Float> pieValues = computeValue(valueCount);
+
+        for(int i = 0; i < pieValues.size(); i++){
+            entries.add(new PieEntry(pieValues.get(i)));
+            //entries.add(new PieEntry(valueCount[i]))
+        }
+        PieDataSet set = new PieDataSet(entries, "test");
+        PieData data = new PieData(set);
+        return data;
+
+
+    }
+
+    private ArrayList computeValue(int[] valueCount){
+
+        int totalCount = 0;
+        int sliceCount = valueCount.length;
+        ArrayList<Float> computedValues = new ArrayList<>();
+        //more efficient way of doing this?
+        for(int i = 0; i < valueCount.length; i++){
+
+            totalCount += valueCount[i];
+        }
+
+        for(int i = 0; i < valueCount.length; i++){
+            computedValues.add((float)valueCount[i] / totalCount * 10);
+        }
+
+        return computedValues;
+
+
+    }
 }
