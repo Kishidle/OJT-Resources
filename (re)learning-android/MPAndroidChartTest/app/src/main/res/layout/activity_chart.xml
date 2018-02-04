@@ -5,6 +5,13 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <Spinner
+        android:id="@+id/chartListSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14pt"
+        android:gravity="center"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,13 +19,14 @@
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart1"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
-
+            android:layout_height="300dp"
+            android:layout_width="350dp"/>
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="300dp"
+            android:layout_width="350dp"/>
+
+
 
     </LinearLayout>
 
