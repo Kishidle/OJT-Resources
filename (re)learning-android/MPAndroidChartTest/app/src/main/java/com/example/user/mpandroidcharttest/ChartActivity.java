@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.example.user.mpandroidcharttest.Model.Child;
@@ -27,8 +29,8 @@ import java.util.List;
 
 public class ChartActivity extends AppCompatActivity {
 
-    private PieChart mPie1;
-    private PieChart mPie2;
+    private PieChart mPieLeft;
+    private PieChart mPieRight;
     private Spinner mSpin1;
     private Spinner mSpin2;
     private Spinner mChartSpin;
@@ -44,20 +46,25 @@ public class ChartActivity extends AppCompatActivity {
     private Button mUpdateBtn;
     private ArrayList<PieEntry> pieEntries1;
     private ArrayList<PieEntry> pieEntries2;
+    private RelativeLayout graphLayoutLeft, graphLayoutRight;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         //TODO SQLite database or use the DatabaseHelper from GeeBee, whichever works better
+        //TODO relative layout instead of static charts in activity, so that charts can be added. check geebee source code on how
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
-        mPie1=(PieChart) findViewById(R.id.piechart1);
-        mPie2=(PieChart) findViewById(R.id.piechart2);
+        //mPie1=(PieChart) findViewById(R.id.piechart1);
+        //mPie2=(PieChart) findViewById(R.id.piechart2);
 
-        createPieChart(mPie1);
-        createPieChart(mPie2);
+        graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
+        graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
+
+        createPieChart(mPieLeft);
+        createPieChart(mPieRight);
 
         mSpin1=(Spinner) findViewById(R.id.chart1_spinner);
         mSpin2=(Spinner) findViewById(R.id.chart2_spinner);
@@ -95,18 +102,7 @@ public class ChartActivity extends AppCompatActivity {
             }
         });
 
-        mChartSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
-                mChartSelected = mChartSpin.getSelectedItem().toString();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView){
-
-            }
-
-        });
 
         //TODO add function to choose which type of chart to use. default = pie chart. also add filtering by region, etc.
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
@@ -119,6 +115,27 @@ public class ChartActivity extends AppCompatActivity {
 
         createData();
         loadDefault();
+
+        mChartSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
+                mChartSelected = mChartSpin.getSelectedItem().toString();
+                ViewGroup.LayoutParams paramsLeft, paramsRight;
+                graphLayoutLeft.removeAllViews();
+                graphLayoutRight.removeAllViews();
+                switch(mChartSelected){
+                    case "Line Chart": break;
+                    case "Bar Chart": break;
+                    case "Pie Chart": break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView){
+
+            }
+
+        });
 
 
 
@@ -183,22 +200,22 @@ public class ChartActivity extends AppCompatActivity {
                 //create PieChart data
 
                 String[] test = {"test1", "test2", "test3", "test4"};
-                PieData data = populatePie(mPie1, bmiCount, test); //or do this in populatePie?
-                mPie1.setData(data);
-                mPie2.setData(data);
+                PieData data = populatePie(mPieLeft, bmiCount, test); //or do this in populatePie?
+                mPieLeft.setData(data);
+                mPieRight.setData(data);
                 Log.d("test2", "did it go here?");
                 break;
         }
 
-        mPie1.animateY(1000);
+        mPieLeft.animateY(1000);
         Description description = new Description();
         description.setText("BMI distribution");
-        mPie1.setDescription(description);
-        mPie1.invalidate();
+        mPieLeft.setDescription(description);
+        mPieLeft.invalidate();
 
 
-        mPie2.invalidate();
-        mPie2.animateY(1000);
+        mPieRight.invalidate();
+        mPieRight.animateY(1000);
         //mPie1.animateY(3000, Easing.EasingOption.EaseInOutElastic);
 
 
@@ -314,16 +331,27 @@ public class ChartActivity extends AppCompatActivity {
         //create PieChart data
 
         String[] test = {"test1", "test2", "test3", "test4"};
-        PieData data = populatePie(mPie1, bmiCount, test); //or do this in populatePie?
-        mPie1.setData(data);
-        mPie2.setData(data);
+        PieData data = populatePie(mPieLeft, bmiCount, test); //or do this in populatePie?
+        mPieLeft.setData(data);
+        mPieRight.setData(data);
         Log.d("test2default", "did it go here?");
 
-        mPie1.invalidate();
-        mPie1.animateY(1000);
+        mPieLeft.invalidate();
+        mPieLeft.animateY(1000);
 
 
-        mPie2.invalidate();
-        mPie2.animateY(1000);
+        mPieRight.invalidate();
+        mPieRight.animateY(1000);
+    }
+
+    public void selectChart(){
+
+        switch(mChartSelected){
+
+            case "Line Chart": break;
+            case "Bar Chart": break;
+            case "Pie Chart":
+                break;
+        }
     }
 }
