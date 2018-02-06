@@ -13,9 +13,9 @@
         <item>BMI</item>
     </string-array>
     <string-array name="chart_array">
-        <item>Line Chart</item>
-        <item>Bar Chart</item>
         <item>Pie Chart</item>
+        <item>Bar Chart</item>
+        <item>Line Chart</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

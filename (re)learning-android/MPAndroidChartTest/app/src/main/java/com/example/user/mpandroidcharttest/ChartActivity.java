@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -38,15 +39,13 @@ public class ChartActivity extends AppCompatActivity {
     private String mFilter2;
     private String mChartSelected;
     private ArrayList<Child> childList;
-    private Child childData1;
-    private Child childData2;
-    private Child childData3;
-    private Child childData4;
-    private Child childData5;
+    private Child childData1, childData2, childData3, childData4, childData5;
     private Button mUpdateBtn;
     private ArrayList<PieEntry> pieEntries1;
     private ArrayList<PieEntry> pieEntries2;
     private RelativeLayout graphLayoutLeft, graphLayoutRight;
+    private String xData, xDataRight;
+    private int[] yDataLeft, yDataRight
 
 
     @Override
@@ -62,9 +61,6 @@ public class ChartActivity extends AppCompatActivity {
 
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
-
-        createPieChart(mPieLeft);
-        createPieChart(mPieRight);
 
         mSpin1=(Spinner) findViewById(R.id.chart1_spinner);
         mSpin2=(Spinner) findViewById(R.id.chart2_spinner);
@@ -114,35 +110,63 @@ public class ChartActivity extends AppCompatActivity {
         mChartSpin.setAdapter(chartAdapter);
 
         createData();
-        loadDefault();
+        createCharts();
+        prepareChartData();
 
         mChartSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
+                //adding charts to the two RelativeLayouts
                 mChartSelected = mChartSpin.getSelectedItem().toString();
                 ViewGroup.LayoutParams paramsLeft, paramsRight;
                 graphLayoutLeft.removeAllViews();
                 graphLayoutRight.removeAllViews();
-                switch(mChartSelected){
-                    case "Line Chart": break;
-                    case "Bar Chart": break;
-                    case "Pie Chart": break;
+
+                if(mChartSelected.equals("Pie Chart")){
+                    graphLayoutLeft.addView(mPieLeft);
+                    graphLayoutRight.addView(mPieRight);
+
+                    //adjust the size
+                    paramsLeft = mPieLeft.getLayoutParams();
+                    paramsRight = mPieRight.getLayoutParams();
+
+                    paramsRight.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    paramsRight.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 }
+                else{
+                    graphLayoutLeft.addView(mPieLeft);
+                    paramsLeft = mPieLeft.getLayoutParams();
+                }
+
+                if(!mChartSelected.equals("PieChart")){
+                    graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0f));
+                }
+                else{
+                    graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+                }
+
+                paramsLeft.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                paramsLeft.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+                populateChart();
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView){
 
+                mChartSelected = "Pie Chart";
+                graphLayoutLeft.addView(mPieLeft);
+
+                ViewGroup.LayoutParams params = mPieLeft.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
             }
 
         });
 
 
 
-    }
-
-    public void updateChart(){
-        //update both charts based on selected item from respectivespinners
     }
 
     public void createData(){
@@ -167,14 +191,17 @@ public class ChartActivity extends AppCompatActivity {
         childList.add(childData4);
         childList.add(childData5);
 
+    }
 
-
-
+    public void createCharts(){
+        mPieLeft = createPieChart();
+        mPieRight = createPieChart();
     }
 
     public void updateChartButton(View view){
         //TODO create switch statements for mFilter
         //TODO check mPieChart, I think that's why it's not working. not using the actual pie chart in the layout
+        //TODO either remove button so that it updates when you change the spinner, or make it so that the invalidates work here and the computations are elsewhere
         //mPie1 = createPieChart(mPie1);
         Log.d("test", mFilter1);
 
@@ -221,10 +248,47 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    private void createPieChart(PieChart pieChart){
+    private void prepareChartData(){
+
+        ValueCounter vCounterLeft = new ValueCounter(childList);
+        ValueCounter vCounterRight = new ValueCounter(childList);
+
+        //basically use xData, yDataLeft, and yDataRight and get the values from the filters
+        switch(mFilter1){
+
+            case "BMI":
+                /*
+                xData = vCounterLeft.getLabelBMI();
+                yDataLeft = vCounterLeft.getBMI();
+                yDataRight = vCounterRight.getBMI();
+                */
 
 
+                break;
+            case "Vaccination": break;
+            case "test": break;
+        }
 
+
+    }
+
+    private void populateChart(){
+        if(mChartSelected.equals("Pie Chart")){
+            //preparePieChart(mPieLeft);
+            //preparePieChart(mPieRight);
+        }
+        else if(mChartSelected.equals("Bar Chart")){
+            //prepareBarChart();
+        }
+        else if(mChartSelected.equals("Line Chart")){
+            //prepareLineChart();
+        }
+
+    }
+
+    private PieChart createPieChart(){
+
+        PieChart pieChart = new PieChart(this);
         // configure pie chart
         pieChart.setUsePercentValues(true);
 
@@ -240,8 +304,6 @@ public class ChartActivity extends AppCompatActivity {
 
         pieChart.setTransparentCircleRadius(50f);
 
-
-
         // set a chart value selected listener
         //pieChart.setOnChartValueSelectedListener(getOnChartValueSelectedListener());
 
@@ -255,10 +317,7 @@ public class ChartActivity extends AppCompatActivity {
         l.setXEntrySpace(7);
         l.setYEntrySpace(5);
 
-        //return pieChart;
-
-
-
+        return pieChart;
     }
 
     private PieData populatePie(PieChart pieChart, int[] valueCount, String[] valueLabel){
@@ -315,43 +374,5 @@ public class ChartActivity extends AppCompatActivity {
         return computedValues;
 
 
-    }
-
-    /*
-        Load default pie chart into Activity so it doesn't look empty when the app starts
-     */
-    public void loadDefault(){
-        mFilter1 = "BMI";
-        mFilter2 = "BMI";
-
-        ValueCounter bmiCounter = new ValueCounter(childList);
-        bmiCounter.setValBMI();
-        int[] bmiCount = bmiCounter.getValBMI();
-
-        //create PieChart data
-
-        String[] test = {"test1", "test2", "test3", "test4"};
-        PieData data = populatePie(mPieLeft, bmiCount, test); //or do this in populatePie?
-        mPieLeft.setData(data);
-        mPieRight.setData(data);
-        Log.d("test2default", "did it go here?");
-
-        mPieLeft.invalidate();
-        mPieLeft.animateY(1000);
-
-
-        mPieRight.invalidate();
-        mPieRight.animateY(1000);
-    }
-
-    public void selectChart(){
-
-        switch(mChartSelected){
-
-            case "Line Chart": break;
-            case "Bar Chart": break;
-            case "Pie Chart":
-                break;
-        }
     }
 }
