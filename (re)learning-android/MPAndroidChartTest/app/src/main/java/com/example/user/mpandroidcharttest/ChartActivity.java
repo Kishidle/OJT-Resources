@@ -45,14 +45,16 @@ public class ChartActivity extends AppCompatActivity {
     private ArrayList<PieEntry> pieEntries2;
     private RelativeLayout graphLayoutLeft, graphLayoutRight;
     private String xData, xDataRight;
-    private int[] yDataLeft, yDataRight
+    private int[] yDataLeft, yDataRight;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         //TODO SQLite database or use the DatabaseHelper from GeeBee, whichever works better
-        //TODO relative layout instead of static charts in activity, so that charts can be added. check geebee source code on how
+        //TODO relative layout instead of static charts in activity, so that charts can be added. check geebee source code on how -- done
+        //TODO replace spinner values with column headers from the synthetic dataset
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
@@ -148,7 +150,7 @@ public class ChartActivity extends AppCompatActivity {
                 paramsLeft.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 paramsLeft.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-                populateChart();
+                prepareChart();
 
             }
 
@@ -227,7 +229,7 @@ public class ChartActivity extends AppCompatActivity {
                 //create PieChart data
 
                 String[] test = {"test1", "test2", "test3", "test4"};
-                PieData data = populatePie(mPieLeft, bmiCount, test); //or do this in populatePie?
+                PieData data = preparePieChartData(mPieLeft, bmiCount); //or do this in populatePie?
                 mPieLeft.setData(data);
                 mPieRight.setData(data);
                 Log.d("test2", "did it go here?");
@@ -272,9 +274,10 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    private void populateChart(){
+    private void prepareChart(){
         if(mChartSelected.equals("Pie Chart")){
-            //preparePieChart(mPieLeft);
+            preparePieChartData(mPieLeft, yDataLeft);
+            preparePieChartData(mPieRight, yDataRight);
             //preparePieChart(mPieRight);
         }
         else if(mChartSelected.equals("Bar Chart")){
@@ -320,7 +323,7 @@ public class ChartActivity extends AppCompatActivity {
         return pieChart;
     }
 
-    private PieData populatePie(PieChart pieChart, int[] valueCount, String[] valueLabel){
+    private PieData preparePieChartData(PieChart pieChart, int[] valueCount){
 
         List<PieEntry> entries = new ArrayList<>();
 
