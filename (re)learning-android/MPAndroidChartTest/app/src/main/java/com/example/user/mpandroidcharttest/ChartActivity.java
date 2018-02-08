@@ -16,9 +16,17 @@ import android.widget.Spinner;
 import com.example.user.mpandroidcharttest.Model.Child;
 import com.example.user.mpandroidcharttest.Model.ValueCounter;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -32,6 +40,8 @@ public class ChartActivity extends AppCompatActivity {
 
     private PieChart mPieLeft;
     private PieChart mPieRight;
+    private LineChart lineChart;
+    private BarChart barChart;
     private Spinner mSpin1;
     private Spinner mSpin2;
     private Spinner mChartSpin;
@@ -198,6 +208,7 @@ public class ChartActivity extends AppCompatActivity {
     public void createCharts(){
         mPieLeft = createPieChart();
         mPieRight = createPieChart();
+        barChart = createBarChart();
     }
 
     public void updateChartButton(View view){
@@ -259,11 +270,11 @@ public class ChartActivity extends AppCompatActivity {
         switch(mFilter1){
 
             case "BMI":
-                /*
-                xData = vCounterLeft.getLabelBMI();
-                yDataLeft = vCounterLeft.getBMI();
-                yDataRight = vCounterRight.getBMI();
-                */
+
+                //xData = vCounterLeft.getLabelBMI();
+                yDataLeft = vCounterLeft.getValBMI();
+                yDataRight = vCounterRight.getValBMI();
+
 
 
                 break;
@@ -286,6 +297,32 @@ public class ChartActivity extends AppCompatActivity {
         else if(mChartSelected.equals("Line Chart")){
             //prepareLineChart();
         }
+
+    }
+
+    private void createLineChart(){
+
+        lineChart = new LineChart(this);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(true);
+        lineChart.setPinchZoom(false);
+
+
+    }
+
+    private void prepareLineChartData(LineChart lineChart, int[] valueCount){
+
+        List<Entry> lineEntries = new ArrayList<>();
+        ArrayList<Float> lineValues = computeValue(valueCount);
+
+        for(int i = 0; i < lineValues.size(); i++){
+            Log.d("linevalue", lineValues.get(i).toString());
+            lineEntries.add(new Entry(lineValues.get(i), i));
+        }
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "test");
+        LineData lineData = new LineData(lineDataSet);
+        lineChart.setData(lineData);
 
     }
 
@@ -321,6 +358,35 @@ public class ChartActivity extends AppCompatActivity {
         l.setYEntrySpace(5);
 
         return pieChart;
+    }
+
+
+
+    private BarChart createBarChart(){
+
+        barChart = new BarChart(this);
+        barChart.setDrawValueAboveBar(true);
+
+        return barChart;
+    }
+
+    private void prepareBarChartData(BarChart barChart, int[] valueCount){
+
+        List<BarEntry> entries = new ArrayList<>();
+
+        ArrayList<Float> barValues = computeValue(valueCount);
+
+        for(int i = 0; i < barValues.size(); i++){
+
+            Log.d("Bar Values", barValues.get(i).toString());
+            entries.add(new BarEntry(barValues.get(i), i));
+        }
+        BarDataSet barDataSet = new BarDataSet(entries, "BMI distribution");
+        BarData barData = new BarData(barDataSet);
+        barChart.setData(barData);
+        barChart.setFitBars(true);
+
+
     }
 
     private PieData preparePieChartData(PieChart pieChart, int[] valueCount){
