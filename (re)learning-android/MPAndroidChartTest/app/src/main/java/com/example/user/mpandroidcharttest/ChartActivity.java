@@ -146,7 +146,7 @@ public class ChartActivity extends AppCompatActivity {
                     paramsLeft = mPieLeft.getLayoutParams();
                     paramsRight = mPieRight.getLayoutParams();
 
-                    paramsRight.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    paramsRight.height = 400;
                     paramsRight.width = 400;
                 }
                 else{
@@ -158,11 +158,11 @@ public class ChartActivity extends AppCompatActivity {
                     graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0f));
                 }
                 else{
-                    graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+                    graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(400, 400, 1f));
                 }
 
                 paramsLeft.width = 400;
-                paramsLeft.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                paramsLeft.height = 400;
 
                 prepareChart();
 
