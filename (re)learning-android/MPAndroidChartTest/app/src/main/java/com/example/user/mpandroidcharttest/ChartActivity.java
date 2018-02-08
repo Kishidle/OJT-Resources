@@ -122,6 +122,9 @@ public class ChartActivity extends AppCompatActivity {
         mChartSpin.setAdapter(chartAdapter);
 
         createData();
+        mFilter1 = "BMI";
+        Log.d("mfiltertest", mFilter1);
+        Log.d("hitest", "testing it started here");
         createCharts();
         prepareChartData();
 
@@ -139,11 +142,12 @@ public class ChartActivity extends AppCompatActivity {
                     graphLayoutRight.addView(mPieRight);
 
                     //adjust the size
+                    Log.d("charttag", "did it go here?");
                     paramsLeft = mPieLeft.getLayoutParams();
                     paramsRight = mPieRight.getLayoutParams();
 
                     paramsRight.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    paramsRight.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    paramsRight.width = 400;
                 }
                 else{
                     graphLayoutLeft.addView(mPieLeft);
@@ -157,7 +161,7 @@ public class ChartActivity extends AppCompatActivity {
                     graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                 }
 
-                paramsLeft.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                paramsLeft.width = 400;
                 paramsLeft.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
                 prepareChart();
@@ -264,7 +268,9 @@ public class ChartActivity extends AppCompatActivity {
     private void prepareChartData(){
 
         ValueCounter vCounterLeft = new ValueCounter(childList);
+        vCounterLeft.setValBMI();
         ValueCounter vCounterRight = new ValueCounter(childList);
+        vCounterRight.setValBMI();
 
         //basically use xData, yDataLeft, and yDataRight and get the values from the filters
         switch(mFilter1){
@@ -287,6 +293,7 @@ public class ChartActivity extends AppCompatActivity {
 
     private void prepareChart(){
         if(mChartSelected.equals("Pie Chart")){
+            Log.d("preparecharttest", Integer.toString(childList.get(1).getcAge()));
             preparePieChartData(mPieLeft, yDataLeft);
             preparePieChartData(mPieRight, yDataRight);
             //preparePieChart(mPieRight);
@@ -428,7 +435,8 @@ public class ChartActivity extends AppCompatActivity {
     private ArrayList computeValue(int[] valueCount){
 
         int totalCount = 0;
-        int sliceCount = valueCount.length;
+
+        //int sliceCount = valueCount.length;
         ArrayList<Float> computedValues = new ArrayList<>();
         //more efficient way of doing this?
         for(int i = 0; i < valueCount.length; i++){

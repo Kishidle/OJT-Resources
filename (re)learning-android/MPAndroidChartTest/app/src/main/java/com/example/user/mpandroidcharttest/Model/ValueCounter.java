@@ -1,5 +1,7 @@
 package com.example.user.mpandroidcharttest.Model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +39,7 @@ public class ValueCounter {
                     break;
             }
         }
+        Log.d("setValBMI", "it went here");
     }
 
     public int[] getValBMI(){
