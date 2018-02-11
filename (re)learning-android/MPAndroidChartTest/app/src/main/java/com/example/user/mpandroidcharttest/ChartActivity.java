@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.user.mpandroidcharttest.Model.Child;
 import com.example.user.mpandroidcharttest.Model.ValueCounter;
@@ -149,16 +151,20 @@ public class ChartActivity extends AppCompatActivity {
                     paramsRight.height = 400;
                     paramsRight.width = 400;
                 }
+                else if(mChartSelected.equals("Bar Chart")){
+                    graphLayoutLeft.addView(barChart);
+                    paramsLeft = barChart.getLayoutParams();
+                }
                 else{
-                    graphLayoutLeft.addView(mPieLeft);
-                    paramsLeft = mPieLeft.getLayoutParams();
+                    graphLayoutLeft.addView(lineChart);
+                    paramsLeft = lineChart.getLayoutParams();
                 }
 
-                if(!mChartSelected.equals("PieChart")){
+                if(!mChartSelected.equals("Pie Chart")){
                     graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0f));
                 }
                 else{
-                    graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(400, 400, 1f));
+                    //graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(400, 400, 1f));
                 }
 
                 paramsLeft.width = 400;
@@ -173,10 +179,19 @@ public class ChartActivity extends AppCompatActivity {
 
                 mChartSelected = "Pie Chart";
                 graphLayoutLeft.addView(mPieLeft);
+                graphLayoutRight.addView(mPieRight);
 
                 ViewGroup.LayoutParams params = mPieLeft.getLayoutParams();
                 params.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+                ViewGroup.LayoutParams paramsRight = mPieRight.getLayoutParams();
+                paramsRight.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+                Log.d("onnothing", "test");
+
+                prepareChart();
             }
 
         });
@@ -244,9 +259,8 @@ public class ChartActivity extends AppCompatActivity {
                 //create PieChart data
 
                 String[] test = {"test1", "test2", "test3", "test4"};
-                PieData data = preparePieChartData(mPieLeft, bmiCount); //or do this in populatePie?
-                mPieLeft.setData(data);
-                mPieRight.setData(data);
+                preparePieChartData(mPieLeft, bmiCount); //or do this in populatePie?
+
                 Log.d("test2", "did it go here?");
                 break;
         }
@@ -299,10 +313,10 @@ public class ChartActivity extends AppCompatActivity {
             //preparePieChart(mPieRight);
         }
         else if(mChartSelected.equals("Bar Chart")){
-            //prepareBarChart();
+            prepareBarChartData(barChart, yDataLeft);
         }
         else if(mChartSelected.equals("Line Chart")){
-            //prepareLineChart();
+            prepareLineChartData(lineChart, yDataLeft);
         }
 
     }
@@ -313,7 +327,6 @@ public class ChartActivity extends AppCompatActivity {
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setPinchZoom(false);
-
 
     }
 
@@ -330,6 +343,7 @@ public class ChartActivity extends AppCompatActivity {
         LineDataSet lineDataSet = new LineDataSet(lineEntries, "test");
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
+        lineChart.invalidate();
 
     }
 
@@ -383,6 +397,8 @@ public class ChartActivity extends AppCompatActivity {
 
         ArrayList<Float> barValues = computeValue(valueCount);
 
+        Log.d("piecharttest", "test1");
+
         for(int i = 0; i < barValues.size(); i++){
 
             Log.d("Bar Values", barValues.get(i).toString());
@@ -392,11 +408,11 @@ public class ChartActivity extends AppCompatActivity {
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
         barChart.setFitBars(true);
-
+        barChart.invalidate();
 
     }
 
-    private PieData preparePieChartData(PieChart pieChart, int[] valueCount){
+    private void preparePieChartData(PieChart pieChart, int[] valueCount){
 
         List<PieEntry> entries = new ArrayList<>();
 
@@ -427,7 +443,9 @@ public class ChartActivity extends AppCompatActivity {
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(12f);
         data.setValueTextColor(Color.BLACK);
-        return data;
+        pieChart.setData(data);
+        pieChart.invalidate();
+
 
 
     }
