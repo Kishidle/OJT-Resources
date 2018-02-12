@@ -225,6 +225,10 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
+    public void importCSV(){
+        //TODO add import csv
+    }
+
     public void createCharts(){
         mPieLeft = createPieChart();
         mPieRight = createPieChart();
