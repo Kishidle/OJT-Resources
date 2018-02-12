@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.user.mpandroidcharttest.Model.Child;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,7 +110,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public Child getChild(String id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_CHILD, new String[] { COL_ID, COL_REGION, COL_PROVINCE, COL_MUNICIPAL, COL_BARANGAY, COL_GENDER, COL_AGE
+        Cursor cursor = db.query(TABLE_CHILD, new String[] { COL_ID, COL_REGION, COL_PROVINCE, COL_MUNICIPAL, COL_BARANGAY, COL_GENDER, COL_AGE,
                                                             COL_WEIGHT, COL_HEIGHT, COL_BMI, COL_VACCPOLO, COL_VACCTETA, COL_EYES, COL_COLOR, COL_HEARING,
                                                             COL_FINEMOTOR, COL_GROSSMOTOR, COL_MENTAL1, COL_MENTAL2, COL_MENTAL3, COL_MENTAL4, COL_MENTAL5}, COL_ID + "=?",
                                                             new String[] { String.valueOf(COL_ID) }, null, null, null, null);
@@ -133,21 +134,98 @@ public class DBHelper extends SQLiteOpenHelper{
         child.setcEyes(cursor.getInt(12));
         child.setcEyeColorTest(cursor.getInt(13));
 
+        return child;
+
     }
+
 
     public List<Child> getAllContacts(){
 
+        List<Child> childList = new ArrayList<>();
+
+        //select all
+        String selectQuery = "SELECT * FROM " + TABLE_CHILD;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()){
+
+            do{
+                Child child = new Child();
+                child.setChildID(cursor.getString(0));
+                child.setRegionNum(cursor.getInt(1));
+                child.setProvinceNum(cursor.getInt(2));
+                child.setMunicipalNum(cursor.getInt(3));
+                child.setBarangayNum(cursor.getInt(4));
+                child.setcGender(cursor.getInt(5));
+                child.setcAge(cursor.getInt(6));
+                child.setcWeight(cursor.getInt(7));
+                child.setcHeight(cursor.getInt(8));
+                child.setcBMI(cursor.getFloat(9));
+                child.setcVaccPol(cursor.getInt(10));
+                child.setcVaccTeta(cursor.getInt(11));
+                child.setcEyes(cursor.getInt(12));
+                child.setcEyeColorTest(cursor.getInt(13));
+                childList.add(child);
+            } while(cursor.moveToNext());
+        }
+
+        return childList;
     }
+
 
     public int getChildCount(){
 
+        String countQuery = "SELECT * FROM " + TABLE_CHILD;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+
+        return cursor.getCount();
+
     }
+
 
     public int updateChild(Child child){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_ID, child.getChildID());
+        values.put(COL_REGION, child.getRegionNum());
+        values.put(COL_PROVINCE, child.getProvinceNum());
+        values.put(COL_MUNICIPAL, child.getMunicipalNum());
+        values.put(COL_BARANGAY, child.getBarangayNum());
+        values.put(COL_GENDER, child.getcGender());
+        values.put(COL_AGE, child.getcAge());
+        values.put(COL_WEIGHT, child.getcWeight());
+        values.put(COL_HEIGHT, child.getcHeight());
+        values.put(COL_BMI, child.getcBMI());
+        values.put(COL_VACCPOLO, child.getcVaccPol());
+        values.put(COL_VACCTETA, child.getcVaccTeta());
+        values.put(COL_EYES, child.getcEyes());
+        values.put(COL_COLOR, child.getcEyeColorTest());
+        values.put(COL_HEARING, child.getcHearing());
+        values.put(COL_FINEMOTOR, child.getcFineMotor());
+        values.put(COL_GROSSMOTOR, child.getcGrossMotor());
+        values.put(COL_MENTAL1, child.getcMental1());
+        values.put(COL_MENTAL2, child.getcMental2());
+        values.put(COL_MENTAL3, child.getcMental3());
+        values.put(COL_MENTAL4, child.getcMental4());
+        values.put(COL_MENTAL5, child.getcMental5());
+
+        return db.update(TABLE_CHILD, values, COL_ID + " = ?",
+                new String[]{ String.valueOf(child.getChildID())});
 
     }
-    public int deleteChild(Child child){
+    public void deleteChild(Child child){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CHILD, COL_ID + " = ?",
+                new String[] { String.valueOf(child.getChildID())});
+        db.close();
 
     }
+
 
 }

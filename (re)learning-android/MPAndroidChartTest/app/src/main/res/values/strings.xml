@@ -17,6 +17,20 @@
         <item>Bar Chart</item>
         <item>Line Chart</item>
     </string-array>
+    <string-array name="filter_array">
+        <item>Region 1</item>
+        <item>Region 2</item>
+        <item>Region 3</item>
+        <item>Region 4</item>
+        <item>Region 5</item>
+        <item>Region 6</item>
+        <item>Region 7</item>
+        <item>Region 8</item>
+        <item>Region 9</item>
+        <item>Region 10</item>
+        <item>Region 11</item>
+        <item>Region 12</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

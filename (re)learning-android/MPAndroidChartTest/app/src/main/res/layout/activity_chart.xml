@@ -53,7 +53,7 @@
                 <RelativeLayout
                     android:id="@+id/graph_container_left"
                     android:layout_width="0dp"
-                    android:layout_height="400dp"
+                    android:layout_height="350dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"></RelativeLayout>
@@ -61,10 +61,34 @@
                 <RelativeLayout
                     android:id="@+id/graph_container_right"
                     android:layout_width="0dp"
-                    android:layout_height="400dp"
+                    android:layout_height="350dp"
                     android:layout_weight="1">
 
                 </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Spinner
+                    android:id="@+id/leftfilter_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/filter_array"
+                    android:gravity="center_horizontal">
+                </Spinner>
+
+                <Spinner
+                    android:id="@+id/rightfilter_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/filter_array"
+                    android:gravity="center_horizontal">
+
+                </Spinner>
             </LinearLayout>
         </LinearLayout>
 

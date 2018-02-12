@@ -211,17 +211,17 @@ public class ChartActivity extends AppCompatActivity {
         childData5 = new Child();
 
         //BMI is placeholder for now, TODO set calculated BMI values
-        childData1.setParams("cabedg", 4, 4, 4, 4, 0, 15, 53, 164, 25);
-        childData2.setParams("abcedg", 3, 2, 1, 2, 1, 10, 43, 161, 22);
-        childData3.setParams("zxcvbg", 10, 9, 8, 7, 1, 8, 38, 146, 23);
-        childData4.setParams("asdasd", 5, 4, 2, 1, 0, 10, 38, 150, 17);
-        childData5.setParams("zxczcx", 2, 3, 2, 3, 1, 11, 12, 130, 50);
+        childData1.setParams("cabedg", 4, 4, 4, 4, 0, 15, 53, 164, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0);
+        //childData2.setParams("abcedg", 3, 2, 1, 2, 1, 10, 43, 161, 22);
+        //childData3.setParams("zxcvbg", 10, 9, 8, 7, 1, 8, 38, 146, 23);
+        //childData4.setParams("asdasd", 5, 4, 2, 1, 0, 10, 38, 150, 17);
+        //childData5.setParams("zxczcx", 2, 3, 2, 3, 1, 11, 12, 130, 50);
 
         childList.add(childData1);
-        childList.add(childData2);
-        childList.add(childData3);
-        childList.add(childData4);
-        childList.add(childData5);
+        //childList.add(childData2);
+        //childList.add(childData3);
+        //childList.add(childData4);
+        //childList.add(childData5);
 
     }
 
@@ -308,7 +308,7 @@ public class ChartActivity extends AppCompatActivity {
 
     private void prepareChart(){
         if(mChartSelected.equals("Pie Chart")){
-            Log.d("preparecharttest", Integer.toString(childList.get(1).getcAge()));
+            //Log.d("preparecharttest", Integer.toString(childList.get(1).getcAge()));
             preparePieChartData(mPieLeft, yDataLeft);
             preparePieChartData(mPieRight, yDataRight);
             //preparePieChart(mPieRight);
