@@ -16,6 +16,14 @@ public class Child {
     private int cWeight;
     private int cHeight;
     private float cBMI;
+    private int cVaccPol;
+    private int cVaccTeta;
+    private int cEyes;
+    private int cEyeColorTest;
+    private int cHearing;
+    private int cFineMotor;
+    private int cGrossMotor;
+    private int cMental1, cMental2, cMental3, cMental4, cMental5;
 
     public String getChildID() {
         return childID;
@@ -97,7 +105,105 @@ public class Child {
         this.cBMI = cBMI;
     }
 
-    public void setParams(String childID, int regionNum, int provinceNum, int municipalNum, int barangayNum, int cGender, int cAge, int cWeight, int cHeight, float cBMI){
+    public int getcVaccPol() {
+        return cVaccPol;
+    }
+
+    public void setcVaccPol(int cVaccPol) {
+        this.cVaccPol = cVaccPol;
+    }
+
+    public int getcVaccTeta() {
+        return cVaccTeta;
+    }
+
+    public void setcVaccTeta(int cVaccTeta) {
+        this.cVaccTeta = cVaccTeta;
+    }
+
+    public int getcEyes() {
+        return cEyes;
+    }
+
+    public void setcEyes(int cEyes) {
+        this.cEyes = cEyes;
+    }
+
+    public int getcEyeColorTest() {
+        return cEyeColorTest;
+    }
+
+    public void setcEyeColorTest(int cEyeColorTest) {
+        this.cEyeColorTest = cEyeColorTest;
+    }
+
+    public int getcHearing() {
+        return cHearing;
+    }
+
+    public void setcHearing(int cHearing) {
+        this.cHearing = cHearing;
+    }
+
+    public int getcFineMotor() {
+        return cFineMotor;
+    }
+
+    public void setcFineMotor(int cFineMotor) {
+        this.cFineMotor = cFineMotor;
+    }
+
+    public int getcGrossMotor() {
+        return cGrossMotor;
+    }
+
+    public void setcGrossMotor(int cGrossMotor) {
+        this.cGrossMotor = cGrossMotor;
+    }
+
+    public int getcMental1() {
+        return cMental1;
+    }
+
+    public void setcMental1(int cMental1) {
+        this.cMental1 = cMental1;
+    }
+
+    public int getcMental2() {
+        return cMental2;
+    }
+
+    public void setcMental2(int cMental2) {
+        this.cMental2 = cMental2;
+    }
+
+    public int getcMental3() {
+        return cMental3;
+    }
+
+    public void setcMental3(int cMental3) {
+        this.cMental3 = cMental3;
+    }
+
+    public int getcMental4() {
+        return cMental4;
+    }
+
+    public void setcMental4(int cMental4) {
+        this.cMental4 = cMental4;
+    }
+
+    public int getcMental5() {
+        return cMental5;
+    }
+
+    public void setcMental5(int cMental5) {
+        this.cMental5 = cMental5;
+    }
+
+    public void setParams(String childID, int regionNum, int provinceNum, int municipalNum, int barangayNum, int cGender, int cAge, int cWeight, int cHeight, float cBMI,
+                          int cVaccPol, int cVaccTeta, int cEyes, int cEyeColorTest, int cHearing, int cFineMotor, int cGrossMotor,
+                          int cMental1, int cMental2, int cMental3, int cMental4, int cMental5){
 
         setChildID(childID);
         setRegionNum(regionNum);
@@ -109,6 +215,19 @@ public class Child {
         setcWeight(cWeight);
         setcHeight(cHeight);
         setcBMI(cBMI);
+        setcVaccPol(cVaccPol);
+        setcVaccTeta(cVaccTeta);
+        setcEyes(cEyes);
+        setcEyeColorTest(cEyeColorTest);
+        setcHearing(cHearing);
+        setcFineMotor(cFineMotor);
+        setcGrossMotor(cGrossMotor);
+        setcMental1(cMental1);
+        setcMental2(cMental2);
+        setcMental3(cMental3);
+        setcMental4(cMental4);
+        setcMental5(cMental5);
+
 
 
     }
