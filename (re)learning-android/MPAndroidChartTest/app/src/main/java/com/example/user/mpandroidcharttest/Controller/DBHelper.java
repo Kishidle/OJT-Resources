@@ -23,10 +23,10 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "Synthetic Child Data";
 
     //table name
-    private static final String TABLE_CHILD = "Child Data";
+    private static final String TABLE_CHILD = "Child_Data";
 
     //column headers
-    private static final String COL_ID = "Child ID";
+    private static final String COL_ID = "Child_ID";
     private static final String COL_REGION = "Region";
     private static final String COL_PROVINCE = "Province";
     private static final String COL_MUNICIPAL = "Municipality";
@@ -43,11 +43,11 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String COL_HEARING = "Hearing";
     private static final String COL_FINEMOTOR = "Fine Motor";
     private static final String COL_GROSSMOTOR = "Gross Motor";
-    private static final String COL_MENTAL1 = "Mental 1";
-    private static final String COL_MENTAL2 = "Mental 2";
-    private static final String COL_MENTAL3 = "Mental 3";
-    private static final String COL_MENTAL4 = "Mental 4";
-    private static final String COL_MENTAL5 = "Mental 5";
+    private static final String COL_MENTAL1 = "Mental_1";
+    private static final String COL_MENTAL2 = "Mental_2";
+    private static final String COL_MENTAL3 = "Mental_3";
+    private static final String COL_MENTAL4 = "Mental_4";
+    private static final String COL_MENTAL5 = "Mental_5";
 
     public DBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,11 +56,11 @@ public class DBHelper extends SQLiteOpenHelper{
     //creating tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CHILD_TABLE = "CREATE TABLE " + TABLE_CHILD + "(" + COL_ID + " TEXT PRIMARY KEY, " + COL_REGION + " TEXT," + COL_PROVINCE + " TEXT,"
+        String CREATE_CHILD_TABLE = "CREATE TABLE " + TABLE_CHILD + "(" + COL_ID + " TEXT," + COL_REGION + " TEXT," + COL_PROVINCE + " TEXT,"
                 + COL_MUNICIPAL + " TEXT," + COL_BARANGAY + " TEXT," + COL_GENDER + " TEXT," + COL_AGE + " TEXT," + COL_WEIGHT + " TEXT,"
                 + COL_HEIGHT + " TEXT," + COL_BMI + " TEXT," + COL_VACCPOLO + " TEXT," + COL_VACCTETA + " TEXT," + COL_EYES + " TEXT,"
                 + COL_COLOR + " TEXT," + COL_HEARING + " TEXT," + COL_FINEMOTOR + " TEXT," + COL_GROSSMOTOR + " TEXT," + COL_MENTAL1 + " TEXT,"
-                + COL_MENTAL2 + " TEXT, " + COL_MENTAL3 + " TEXT," + COL_MENTAL4 + " TEXT," + COL_MENTAL5 + " TEXT" + ")";
+                + COL_MENTAL2 + " TEXT, " + COL_MENTAL3 + " TEXT," + COL_MENTAL4 + " TEXT," + COL_MENTAL5 + " TEXT" + ");";
         db.execSQL(CREATE_CHILD_TABLE);
     }
     //upgrading database
@@ -126,9 +126,9 @@ public class DBHelper extends SQLiteOpenHelper{
         child.setBarangayNum(cursor.getInt(4));
         child.setcGender(cursor.getInt(5));
         child.setcAge(cursor.getInt(6));
-        child.setcWeight(cursor.getInt(7));
-        child.setcHeight(cursor.getInt(8));
-        child.setcBMI(cursor.getFloat(9));.
+        child.setcWeight(cursor.getFloat(7));
+        child.setcHeight(cursor.getFloat(8));
+        child.setcBMI(cursor.getFloat(9));
         child.setcVaccPol(cursor.getInt(10));
         child.setcVaccTeta(cursor.getInt(11));
         child.setcEyes(cursor.getInt(12));
@@ -139,7 +139,7 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
 
-    public List<Child> getAllContacts(){
+    public List<Child> getAllChild(){
 
         List<Child> childList = new ArrayList<>();
 
@@ -160,8 +160,8 @@ public class DBHelper extends SQLiteOpenHelper{
                 child.setBarangayNum(cursor.getInt(4));
                 child.setcGender(cursor.getInt(5));
                 child.setcAge(cursor.getInt(6));
-                child.setcWeight(cursor.getInt(7));
-                child.setcHeight(cursor.getInt(8));
+                child.setcWeight(cursor.getFloat(7));
+                child.setcHeight(cursor.getFloat(8));
                 child.setcBMI(cursor.getFloat(9));
                 child.setcVaccPol(cursor.getInt(10));
                 child.setcVaccTeta(cursor.getInt(11));

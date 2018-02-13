@@ -1,23 +1,20 @@
 <resources>
     <string name="app_name">MPAndroidChartTest</string>
     <string-array name="test_array">
-        <item>Child ID</item>
-        <item>Region</item>
-        <item>Province</item>
-        <item>Municipality</item>
-        <item>Barangay</item>
         <item>Gender</item>
         <item>Age</item>
         <item>Weight</item>
         <item>Height</item>
         <item>BMI</item>
+        <item>Vaccination Polio</item>
+        <item>Vaccination Tetanus</item>
     </string-array>
     <string-array name="chart_array">
         <item>Pie Chart</item>
         <item>Bar Chart</item>
-        <item>Line Chart</item>
     </string-array>
     <string-array name="filter_array">
+        <item>All</item>
         <item>Region 1</item>
         <item>Region 2</item>
         <item>Region 3</item>

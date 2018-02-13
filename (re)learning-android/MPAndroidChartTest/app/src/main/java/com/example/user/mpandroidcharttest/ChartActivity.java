@@ -43,6 +43,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChartActivity extends AppCompatActivity {
 
@@ -50,13 +52,11 @@ public class ChartActivity extends AppCompatActivity {
     private PieChart mPieRight;
     private LineChart lineChart;
     private BarChart barChart;
-    private Spinner mSpin1;
-    private Spinner mSpin2;
-    private Spinner mChartSpin;
-    private String mFilter1;
-    private String mFilter2;
-    private String mChartSelected;
+    private Spinner mSpin1, mSpin2, mChartSpin, mLeftFilterSpin, mRightFilterSpin;
+    private String mFilter1, mFilter2, mChartSelected, mLeftFilter, mRightFilter;
+
     private ArrayList<Child> childList;
+    private ArrayList<Child> filteredList;
     private Child childData1, childData2, childData3, childData4, childData5;
     private Button mUpdateBtn;
     private ArrayList<PieEntry> pieEntries1;
@@ -66,6 +66,7 @@ public class ChartActivity extends AppCompatActivity {
     private int[] yDataLeft, yDataRight;
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
+    private int leftFilterNum, rightFilterNum;
 
 
     @Override
@@ -88,15 +89,35 @@ public class ChartActivity extends AppCompatActivity {
         mSpin1=(Spinner) findViewById(R.id.chart1_spinner);
         mSpin2=(Spinner) findViewById(R.id.chart2_spinner);
         mChartSpin=(Spinner) findViewById(R.id.chartListSpinner);
+        mLeftFilterSpin = (Spinner) findViewById(R.id.leftfilter_spinner);
+        mRightFilterSpin = (Spinner) findViewById(R.id.rightfilter_spinner);
+
 
         pieEntries1 = new ArrayList<>();
         pieEntries2 = new ArrayList<>();
+        childList = new ArrayList<>();
+        filteredList = new ArrayList<>();
 
         mFilter1 = "";
         mFilter2 = "";
         mChartSelected = "";
+        mLeftFilter = "All";
+        mRightFilter = "All";
 
-        mDBHelper = new DBHelper(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpin1.setAdapter(adapter);
+        mSpin2.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> chartAdapter = ArrayAdapter.createFromResource(this, R.array.chart_array, android.R.layout.simple_spinner_item);
+        mChartSpin.setAdapter(chartAdapter);
+
+        ArrayAdapter<CharSequence> filterAdapter = ArrayAdapter.createFromResource(this, R.array.filter_array, android.R.layout.simple_spinner_item);
+        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLeftFilterSpin.setAdapter(filterAdapter);
+        mRightFilterSpin.setAdapter(filterAdapter);
+
+        //mDBHelper = new DBHelper(this);
 
         mSpin1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -123,19 +144,66 @@ public class ChartActivity extends AppCompatActivity {
             }
         });
 
+        mLeftFilterSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
+                Log.d("leftfilter", "it went here lol");
+                mLeftFilter = mLeftFilterSpin.getSelectedItem().toString();
+                if(!mLeftFilter.equals("All")){
+                    /*
+                    Pattern p = Pattern.compile("\"-?\\\\d+");
+                    Matcher m = p.matcher(mLeftFilter);
+                    Log.d("leftfiltertest", mLeftFilter);
+                    while(m.find()){
+                        leftFilterNum = Integer.parseInt(m.group());
+                    }*/
+                    leftFilterNum = i;
+                    Log.d("leftfilternum", Integer.toString(leftFilterNum));
+
+                }
+                prepareChart();
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView){
+
+            }
+        });
+
+        mRightFilterSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
+
+                mRightFilter = mRightFilterSpin.getSelectedItem().toString();
+                if(!mRightFilterSpin.getSelectedItem().toString().equals("All")){
+                    /*
+                    Pattern p = Pattern.compile("\"-?\\\\d+");
+                    Matcher m = p.matcher(mRightFilterSpin.getSelectedItem().toString());
+                    while(m.find()){
+                        rightFilterNum = Integer.parseInt(m.group());
+                    }
+                    */
+                    rightFilterNum = i;
+
+                }
+                prepareChart();
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView){
+
+            }
+        });
+
+
 
         //TODO MOST UPDATED TEST SQLITEDATABASE AND DO FILTERS
         //TODO add function to choose which type of chart to use. default = pie chart. also add filtering by region, etc.
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpin1.setAdapter(adapter);
-        mSpin2.setAdapter(adapter);
 
-        ArrayAdapter<CharSequence> chartAdapter = ArrayAdapter.createFromResource(this, R.array.chart_array, android.R.layout.simple_spinner_item);
-        mChartSpin.setAdapter(chartAdapter);
 
-        importCSV(mDBHelper);
-        //createData();
+        importCSV();
+
+
         mFilter1 = "BMI";
         Log.d("mfiltertest", mFilter1);
         Log.d("hitest", "testing it started here");
@@ -163,13 +231,9 @@ public class ChartActivity extends AppCompatActivity {
                     paramsRight.height = 400;
                     paramsRight.width = 400;
                 }
-                else if(mChartSelected.equals("Bar Chart")){
+                else{
                     graphLayoutLeft.addView(barChart);
                     paramsLeft = barChart.getLayoutParams();
-                }
-                else{
-                    graphLayoutLeft.addView(lineChart);
-                    paramsLeft = lineChart.getLayoutParams();
                 }
 
                 if(!mChartSelected.equals("Pie Chart")){
@@ -236,7 +300,7 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void importCSV(DBHelper mDBHelper){
+    public void importCSV(){
         //TODO add import csv
         String mCSVfile = "syndata.csv";
         AssetManager manager = this.getAssets();
@@ -259,6 +323,7 @@ public class ChartActivity extends AppCompatActivity {
                 }
                 else{
                     String[] col = line.split(",");
+                    Log.d("columntest", line);
                     Child child = new Child();
 
                     child.setChildID(col[0].trim());
@@ -268,9 +333,9 @@ public class ChartActivity extends AppCompatActivity {
                     child.setBarangayNum(Integer.parseInt(col[4].trim()));
                     child.setcGender(Integer.parseInt(col[5].trim()));
                     child.setcAge(Integer.parseInt(col[6].trim()));
-                    child.setcWeight(Integer.parseInt(col[7].trim()));
-                    child.setcHeight(Integer.parseInt(col[8].trim()));
-                    child.setcBMI(Integer.parseInt(col[9].trim()));
+                    child.setcWeight(Float.parseFloat(col[7].trim()));
+                    child.setcHeight(Float.parseFloat(col[8].trim()));
+                    child.setcBMI(Float.parseFloat(col[9].trim()));
                     child.setcVaccPol(Integer.parseInt(col[10].trim()));
                     child.setcVaccTeta(Integer.parseInt(col[11].trim()));
                     child.setcEyes(Integer.parseInt(col[12].trim()));
@@ -283,13 +348,15 @@ public class ChartActivity extends AppCompatActivity {
                     child.setcMental3(Integer.parseInt(col[19].trim()));
                     child.setcMental4(Integer.parseInt(col[20].trim()));
                     child.setcMental5(Integer.parseInt(col[21].trim()));
-                    mDBHelper.addChild(child);
+                    //mDBHelper.addChild(child);
+                    childList.add(child);
 
                 }
             }
         } catch(IOException e){
             e.printStackTrace();
         }
+
     }
 
     public void createCharts(){
@@ -377,8 +444,28 @@ public class ChartActivity extends AppCompatActivity {
     private void prepareChart(){
         if(mChartSelected.equals("Pie Chart")){
             //Log.d("preparecharttest", Integer.toString(childList.get(1).getcAge()));
-            preparePieChartData(mPieLeft, yDataLeft);
-            preparePieChartData(mPieRight, yDataRight);
+            if(mLeftFilter.equals("All")){
+                preparePieChartData(mPieLeft, yDataLeft);
+            }
+            else{
+                filteredList = filterChild("left");
+                Log.d("preparecharttest", "did it go here");
+                ValueCounter vc = new ValueCounter(filteredList);
+                vc.setValBMI();
+                int[] count = vc.getValBMI();
+                preparePieChartData(mPieLeft, count);
+
+            }
+            if(mRightFilter.equals("All")){
+                preparePieChartData(mPieRight, yDataRight);
+            }
+            else{
+                filteredList = filterChild("right");
+                ValueCounter vc = new ValueCounter(filteredList);
+                vc.setValBMI();
+                int[] count = vc.getValBMI();
+                preparePieChartData(mPieRight, count);
+            }
             //preparePieChart(mPieRight);
         }
         else if(mChartSelected.equals("Bar Chart")){
@@ -387,6 +474,25 @@ public class ChartActivity extends AppCompatActivity {
         else if(mChartSelected.equals("Line Chart")){
             prepareLineChartData(lineChart, yDataLeft);
         }
+
+    }
+
+    private ArrayList<Child> filterChild(String position){
+        filteredList = new ArrayList<>();
+        int regionNum;
+        if(position.equals("left")){
+            regionNum = leftFilterNum;
+        }
+        else regionNum = rightFilterNum;
+
+        for(int i = 0; i < childList.size(); i++){
+            if(regionNum == childList.get(i).getRegionNum()){
+                filteredList.add(childList.get(i));
+            }
+        }
+
+        return filteredList;
+
 
     }
 

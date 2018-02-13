@@ -13,8 +13,8 @@ public class Child {
     private int barangayNum;
     private int cGender;
     private int cAge;
-    private int cWeight;
-    private int cHeight;
+    private float cWeight;
+    private float cHeight;
     private float cBMI;
     private int cVaccPol;
     private int cVaccTeta;
@@ -81,19 +81,19 @@ public class Child {
         this.cAge = cAge;
     }
 
-    public int getcWeight() {
+    public float getcWeight() {
         return cWeight;
     }
 
-    public void setcWeight(int cWeight) {
+    public void setcWeight(float cWeight) {
         this.cWeight = cWeight;
     }
 
-    public int getcHeight() {
+    public float getcHeight() {
         return cHeight;
     }
 
-    public void setcHeight(int cHeight) {
+    public void setcHeight(float cHeight) {
         this.cHeight = cHeight;
     }
 
@@ -201,7 +201,7 @@ public class Child {
         this.cMental5 = cMental5;
     }
 
-    public void setParams(String childID, int regionNum, int provinceNum, int municipalNum, int barangayNum, int cGender, int cAge, int cWeight, int cHeight, float cBMI,
+    public void setParams(String childID, int regionNum, int provinceNum, int municipalNum, int barangayNum, int cGender, int cAge, float cWeight, float cHeight, float cBMI,
                           int cVaccPol, int cVaccTeta, int cEyes, int cEyeColorTest, int cHearing, int cFineMotor, int cGrossMotor,
                           int cMental1, int cMental2, int cMental3, int cMental4, int cMental5){
 
