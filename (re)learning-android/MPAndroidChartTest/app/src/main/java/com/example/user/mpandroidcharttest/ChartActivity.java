@@ -1,5 +1,6 @@
 package com.example.user.mpandroidcharttest;
 
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Spinner;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.user.mpandroidcharttest.Controller.DBHelper;
 import com.example.user.mpandroidcharttest.Model.Child;
 import com.example.user.mpandroidcharttest.Model.ValueCounter;
 import com.github.mikephil.charting.animation.Easing;
@@ -35,6 +37,10 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +64,8 @@ public class ChartActivity extends AppCompatActivity {
     private RelativeLayout graphLayoutLeft, graphLayoutRight;
     private String xData, xDataRight;
     private int[] yDataLeft, yDataRight;
+    private DBHelper mDBHelper;
+    private SQLiteDatabase db;
 
 
     @Override
@@ -88,6 +96,8 @@ public class ChartActivity extends AppCompatActivity {
         mFilter2 = "";
         mChartSelected = "";
 
+        mDBHelper = new DBHelper(this);
+
         mSpin1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -114,7 +124,7 @@ public class ChartActivity extends AppCompatActivity {
         });
 
 
-
+        //TODO MOST UPDATED TEST SQLITEDATABASE AND DO FILTERS
         //TODO add function to choose which type of chart to use. default = pie chart. also add filtering by region, etc.
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -124,7 +134,8 @@ public class ChartActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> chartAdapter = ArrayAdapter.createFromResource(this, R.array.chart_array, android.R.layout.simple_spinner_item);
         mChartSpin.setAdapter(chartAdapter);
 
-        createData();
+        importCSV(mDBHelper);
+        //createData();
         mFilter1 = "BMI";
         Log.d("mfiltertest", mFilter1);
         Log.d("hitest", "testing it started here");
@@ -225,14 +236,67 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    public void importCSV(){
+    public void importCSV(DBHelper mDBHelper){
         //TODO add import csv
+        String mCSVfile = "syndata.csv";
+        AssetManager manager = this.getAssets();
+        InputStream inStream = null;
+        try{
+            inStream = manager.open(mCSVfile);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+
+        String line = "";
+        int i = 0;
+        try{
+            while((line = buffer.readLine()) != null){
+
+                if(i == 0){
+                    i++;
+                }
+                else{
+                    String[] col = line.split(",");
+                    Child child = new Child();
+
+                    child.setChildID(col[0].trim());
+                    child.setRegionNum(Integer.parseInt(col[1].trim()));
+                    child.setProvinceNum(Integer.parseInt(col[2].trim()));
+                    child.setMunicipalNum(Integer.parseInt(col[3].trim()));
+                    child.setBarangayNum(Integer.parseInt(col[4].trim()));
+                    child.setcGender(Integer.parseInt(col[5].trim()));
+                    child.setcAge(Integer.parseInt(col[6].trim()));
+                    child.setcWeight(Integer.parseInt(col[7].trim()));
+                    child.setcHeight(Integer.parseInt(col[8].trim()));
+                    child.setcBMI(Integer.parseInt(col[9].trim()));
+                    child.setcVaccPol(Integer.parseInt(col[10].trim()));
+                    child.setcVaccTeta(Integer.parseInt(col[11].trim()));
+                    child.setcEyes(Integer.parseInt(col[12].trim()));
+                    child.setcEyeColorTest(Integer.parseInt(col[13].trim()));
+                    child.setcHearing(Integer.parseInt(col[14].trim()));
+                    child.setcFineMotor(Integer.parseInt(col[15].trim()));
+                    child.setcGrossMotor(Integer.parseInt(col[16].trim()));
+                    child.setcMental1(Integer.parseInt(col[17].trim()));
+                    child.setcMental2(Integer.parseInt(col[18].trim()));
+                    child.setcMental3(Integer.parseInt(col[19].trim()));
+                    child.setcMental4(Integer.parseInt(col[20].trim()));
+                    child.setcMental5(Integer.parseInt(col[21].trim()));
+                    mDBHelper.addChild(child);
+
+                }
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void createCharts(){
         mPieLeft = createPieChart();
         mPieRight = createPieChart();
         barChart = createBarChart();
+        lineChart = createLineChart();
     }
 
     public void updateChartButton(View view){
@@ -326,12 +390,14 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    private void createLineChart(){
+    private LineChart createLineChart(){
 
         lineChart = new LineChart(this);
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setPinchZoom(false);
+
+        return lineChart;
 
     }
 

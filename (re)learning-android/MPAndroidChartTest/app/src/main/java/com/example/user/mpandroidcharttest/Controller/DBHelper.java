@@ -128,7 +128,7 @@ public class DBHelper extends SQLiteOpenHelper{
         child.setcAge(cursor.getInt(6));
         child.setcWeight(cursor.getInt(7));
         child.setcHeight(cursor.getInt(8));
-        child.setcBMI(cursor.getFloat(9));
+        child.setcBMI(cursor.getFloat(9));.
         child.setcVaccPol(cursor.getInt(10));
         child.setcVaccTeta(cursor.getInt(11));
         child.setcEyes(cursor.getInt(12));
@@ -225,6 +225,10 @@ public class DBHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(child.getChildID())});
         db.close();
 
+    }
+
+    public SQLiteDatabase getReadableDatabase(){
+        return this.getReadableDatabase();
     }
 
 
