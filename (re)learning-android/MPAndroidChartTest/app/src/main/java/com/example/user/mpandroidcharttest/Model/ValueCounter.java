@@ -14,6 +14,8 @@ public class ValueCounter {
 
     private int[] valAge = {0, 0}; // <=12 & >12
     private int[] valBMI = {0, 0, 0, 0}; //Underweight, Normal, Overweight, Obese
+    private int[] valPolio = {0, 0};
+    private int[] valTeta = {0, 0};
     private ArrayList<Child> childList;
 
     public ValueCounter(ArrayList<Child> childList){
@@ -44,6 +46,35 @@ public class ValueCounter {
 
     public int[] getValBMI(){
         return valBMI;
+    }
+
+    public void setVaccPolio(){
+        int result;
+        for(int i = 0; i < childList.size(); i++){
+            result = childList.get(i).getcVaccPol();
+            switch(result){
+                case 0: valPolio[0]++; break;
+                case 1: valPolio[1]++; break;
+            }
+        }
+    }
+
+    public int[] getValPolio(){
+        return valPolio;
+    }
+
+    public void setVaccTeta(){
+        int result;
+        for(int i = 0; i < childList.size(); i++){
+            result = childList.get(i).getcVaccTeta();
+            switch(result){
+                case 0: valTeta[0]++; break;
+                case 1: valTeta[1]++; break;
+            }
+        }
+    }
+    public int[] getVaccTeta(){
+        return valTeta;
     }
 
     public String calculateBMI(float cBMI){

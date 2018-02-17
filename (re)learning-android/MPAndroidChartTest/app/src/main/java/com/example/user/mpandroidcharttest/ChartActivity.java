@@ -123,6 +123,7 @@ public class ChartActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mFilter1 = mSpin1.getSelectedItem().toString();
+                prepareChart();
 
             }
 
@@ -135,7 +136,8 @@ public class ChartActivity extends AppCompatActivity {
         mSpin2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mFilter2 = mSpin1.getSelectedItem().toString();
+                mFilter2 = mSpin2.getSelectedItem().toString();
+                prepareChart();
             }
 
             @Override
@@ -205,6 +207,7 @@ public class ChartActivity extends AppCompatActivity {
 
 
         mFilter1 = "BMI";
+        mFilter2 = "BMI";
         Log.d("mfiltertest", mFilter1);
         Log.d("hitest", "testing it started here");
         createCharts();
@@ -395,7 +398,7 @@ public class ChartActivity extends AppCompatActivity {
                 //create PieChart data
 
                 String[] test = {"test1", "test2", "test3", "test4"};
-                preparePieChartData(mPieLeft, bmiCount); //or do this in populatePie?
+                preparePieChartData(mPieLeft, bmiCount, mFilter1); //or do this in populatePie?
 
                 Log.d("test2", "did it go here?");
                 break;
@@ -419,6 +422,7 @@ public class ChartActivity extends AppCompatActivity {
 
         ValueCounter vCounterLeft = new ValueCounter(childList);
         vCounterLeft.setValBMI();
+
         ValueCounter vCounterRight = new ValueCounter(childList);
         vCounterRight.setValBMI();
 
@@ -430,8 +434,6 @@ public class ChartActivity extends AppCompatActivity {
                 //xData = vCounterLeft.getLabelBMI();
                 yDataLeft = vCounterLeft.getValBMI();
                 yDataRight = vCounterRight.getValBMI();
-
-
 
                 break;
             case "Vaccination": break;
@@ -445,26 +447,81 @@ public class ChartActivity extends AppCompatActivity {
         if(mChartSelected.equals("Pie Chart")){
             //Log.d("preparecharttest", Integer.toString(childList.get(1).getcAge()));
             if(mLeftFilter.equals("All")){
-                preparePieChartData(mPieLeft, yDataLeft);
+                ValueCounter vc = new ValueCounter(childList);
+
+                switch(mFilter1){
+                    case "BMI":
+                        vc.setValBMI();
+                        yDataLeft = vc.getValBMI();
+                        break;
+                    case "Vaccination Polio":
+                        vc.setVaccPolio();
+                        yDataLeft = vc.getValPolio();
+                        break;
+                    case "Vaccination Tetanus":
+                        vc.setVaccTeta();
+                        yDataLeft = vc.getVaccTeta();
+                }
+                preparePieChartData(mPieLeft, yDataLeft, mFilter1);
             }
             else{
                 filteredList = filterChild("left");
                 Log.d("preparecharttest", "did it go here");
                 ValueCounter vc = new ValueCounter(filteredList);
-                vc.setValBMI();
-                int[] count = vc.getValBMI();
-                preparePieChartData(mPieLeft, count);
+                int[] count = {0, 0};
+                switch(mFilter1){
+                    case "BMI":
+                        vc.setValBMI();
+                        count = vc.getValBMI();
+                        break;
+                    case "Vaccination Polio":
+                        vc.setVaccPolio();
+                        count = vc.getValPolio();
+                        break;
+                    case "Vaccination Tetanus":
+                        vc.setVaccTeta();
+                        count = vc.getVaccTeta();
+
+                }
+                //int[] count = vc.getValBMI();
+                preparePieChartData(mPieLeft, count, mFilter1);
 
             }
             if(mRightFilter.equals("All")){
-                preparePieChartData(mPieRight, yDataRight);
+                ValueCounter vc = new ValueCounter(childList);
+                switch(mFilter2){
+                    case "BMI":
+                        vc.setValBMI();
+                        yDataRight = vc.getValBMI();
+                        break;
+                    case "Vaccination Polio":
+                        vc.setVaccPolio();
+                        yDataRight = vc.getValPolio();
+                        break;
+                    case "Vaccination Tetanus":
+                        vc.setVaccTeta();
+                        yDataRight = vc.getVaccTeta();
+                }
+                preparePieChartData(mPieRight, yDataRight, mFilter2);
             }
             else{
                 filteredList = filterChild("right");
                 ValueCounter vc = new ValueCounter(filteredList);
-                vc.setValBMI();
-                int[] count = vc.getValBMI();
-                preparePieChartData(mPieRight, count);
+                int[] count = {0, 0};
+                switch(mFilter2){
+                    case "BMI":
+                        vc.setValBMI();
+                        count = vc.getValBMI();
+                        break;
+                    case "Vaccination Polio":
+                        vc.setVaccPolio();
+                        count = vc.getValPolio();
+                        break;
+                    case "Vaccination Tetanus":
+                        vc.setVaccTeta();
+                        count = vc.getVaccTeta();
+                }
+                preparePieChartData(mPieRight, count, mFilter2);
             }
             //preparePieChart(mPieRight);
         }
@@ -589,22 +646,35 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    private void preparePieChartData(PieChart pieChart, int[] valueCount){
+    private void preparePieChartData(PieChart pieChart, int[] valueCount, String mFilter){
 
         List<PieEntry> entries = new ArrayList<>();
 
 
         //compute values for PieChart first
         ArrayList<Float> pieValues = computeValue(valueCount);
+        String[] bmiString = {"underweight", "Normal", "Overweight", "Obese"};
+        String[] vaccString = {"No Vaccination", "With Vaccination"};
 
-        String[] test = {"Underweight", "Normal", "Overweight", "Obese"};
 
+        Log.d("valuesize", Integer.toString(pieValues.size()));
+        Log.d("valuetag", mFilter);
         for(int i = 0; i < pieValues.size(); i++){
             Log.d("Pie Values", pieValues.get(i).toString());
-            entries.add(new PieEntry(pieValues.get(i), test[i]));
+
+            if(mFilter.equals("BMI")){
+                entries.add(new PieEntry(pieValues.get(i), bmiString[i]));
+            }
+            else{
+                entries.add(new PieEntry(pieValues.get(i), vaccString[i]));
+            }
+            //entries.add(new PieEntry(pieValues.get(i), test[i]));
             //entries.add(new PieEntry(valueCount[i]))
         }
-        PieDataSet set = new PieDataSet(entries, "BMI distribution");
+        String label = "BMI distribution";
+        if(mFilter.equals("Vaccination Polio")) label = "Vaccination Polio";
+        else if (mFilter.equals("Vaccination Tetanus")) label = "Vaccination Tetanus";
+        PieDataSet set = new PieDataSet(entries, label);
 
 
         set.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -622,6 +692,7 @@ public class ChartActivity extends AppCompatActivity {
         data.setValueTextColor(Color.BLACK);
         pieChart.setData(data);
         pieChart.invalidate();
+        //pieChart.animateY(1000);
 
 
 
