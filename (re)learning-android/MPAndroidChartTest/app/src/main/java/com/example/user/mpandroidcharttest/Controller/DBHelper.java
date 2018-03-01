@@ -56,11 +56,11 @@ public class DBHelper extends SQLiteOpenHelper{
     //creating tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CHILD_TABLE = "CREATE TABLE " + TABLE_CHILD + "(" + COL_ID + " TEXT," + COL_REGION + " TEXT," + COL_PROVINCE + " TEXT,"
+        String CREATE_CHILD_TABLE = "CREATE TABLE " + TABLE_CHILD + " (" + COL_ID + " TEXT PRIMARY KEY NOT NULL," + COL_REGION + " TEXT," + COL_PROVINCE + " TEXT,"
                 + COL_MUNICIPAL + " TEXT," + COL_BARANGAY + " TEXT," + COL_GENDER + " TEXT," + COL_AGE + " TEXT," + COL_WEIGHT + " TEXT,"
                 + COL_HEIGHT + " TEXT," + COL_BMI + " TEXT," + COL_VACCPOLO + " TEXT," + COL_VACCTETA + " TEXT," + COL_EYES + " TEXT,"
                 + COL_COLOR + " TEXT," + COL_HEARING + " TEXT," + COL_FINEMOTOR + " TEXT," + COL_GROSSMOTOR + " TEXT," + COL_MENTAL1 + " TEXT,"
-                + COL_MENTAL2 + " TEXT, " + COL_MENTAL3 + " TEXT," + COL_MENTAL4 + " TEXT," + COL_MENTAL5 + " TEXT" + ");";
+                + COL_MENTAL2 + " TEXT, " + COL_MENTAL3 + " TEXT," + COL_MENTAL4 + " TEXT," + COL_MENTAL5 + " TEXT" + ")";
         db.execSQL(CREATE_CHILD_TABLE);
     }
     //upgrading database
