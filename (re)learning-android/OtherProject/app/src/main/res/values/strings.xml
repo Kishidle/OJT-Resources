@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">MPAndroidChartTest</string>
+    <string-array name="test_array">
+        <item>BMI</item>
+        <item>Vaccination Polio</item>
+        <item>Vaccination Tetanus</item>
+    </string-array>
+    <string-array name="chart_array">
+        <item>Pie Chart</item>
+        <item>Bar Chart</item>
+    </string-array>
+    <string-array name="filter_array">
+        <item>All</item>
+        <item>Region 1</item>
+        <item>Region 2</item>
+        <item>Region 3</item>
+        <item>Region 4</item>
+        <item>Region 5</item>
+        <item>Region 6</item>
+        <item>Region 7</item>
+        <item>Region 8</item>
+        <item>Region 9</item>
+        <item>Region 10</item>
+        <item>Region 11</item>
+        <item>Region 12</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_text">Update charts</string>
+</resources>
