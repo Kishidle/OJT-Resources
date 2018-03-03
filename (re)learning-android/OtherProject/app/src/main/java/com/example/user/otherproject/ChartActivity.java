@@ -1,4 +1,4 @@
-package com.example.user.mpandroidcharttest;
+package com.example.user.otherproject;
 
 import android.content.res.AssetManager;
 import android.graphics.Color;
@@ -14,12 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.user.mpandroidcharttest.Controller.DBHelper;
-import com.example.user.mpandroidcharttest.Model.Child;
-import com.example.user.mpandroidcharttest.Model.ValueCounter;
-import com.github.mikephil.charting.animation.Easing;
+import com.example.user.otherproject.Controller.DBHelper;
+import com.example.user.otherproject.Model.Child;
+import com.example.user.otherproject.Model.ValueCounter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -43,8 +41,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ChartActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.user.mpandroidcharttest.Controller;
+package com.example.user.otherproject.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.user.mpandroidcharttest.Model.Child;
+import com.example.user.otherproject.Model.Child;
 
 import java.util.ArrayList;
 import java.util.List;

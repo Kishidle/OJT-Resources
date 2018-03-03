@@ -1,4 +1,4 @@
-package com.example.user.mpandroidcharttest;
+package com.example.user.otherproject;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

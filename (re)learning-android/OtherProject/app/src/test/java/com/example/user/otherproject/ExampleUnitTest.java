@@ -1,4 +1,4 @@
-package com.example.user.mpandroidcharttest;
+package com.example.user.otherproject;
 
 import org.junit.Test;
 

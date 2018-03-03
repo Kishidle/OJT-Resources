@@ -1,10 +1,8 @@
-package com.example.user.mpandroidcharttest.Model;
+package com.example.user.otherproject.Model;
 
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Ramon on 1/30/2018.

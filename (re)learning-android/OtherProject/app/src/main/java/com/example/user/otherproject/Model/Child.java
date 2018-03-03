@@ -1,4 +1,4 @@
-package com.example.user.mpandroidcharttest.Model;
+package com.example.user.otherproject.Model;
 
 /**
  * Created by Ramon on 1/30/2018.
