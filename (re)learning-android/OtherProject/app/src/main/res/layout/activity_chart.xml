@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <FrameLayout
         android:id="@+id/content_frame"
@@ -117,6 +119,14 @@
             android:text="@string/update_text"
             android:onClick="updateChartButton"/>
     </FrameLayout>
+    <ListView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
+
+    </ListView>
 
 
 
