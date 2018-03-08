@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -7,128 +7,129 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <Spinner
-            android:id="@+id/chartListSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14pt" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/chart1_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/test_array"
-                        android:gravity="center_horizontal"></Spinner>
-
-                    <Spinner
-                        android:id="@+id/chart2_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/test_array"
-                        android:gravity="center_horizontal"></Spinner>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:id="@+id/graph_container_left"
-                        android:layout_width="0dp"
-                        android:layout_height="350dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_weight="1"></RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/graph_container_right"
-                        android:layout_width="0dp"
-                        android:layout_height="350dp"
-                        android:layout_weight="1">
-
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <Spinner
-                        android:id="@+id/leftfilter_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/filter_array"
-                        android:gravity="center_horizontal">
-                    </Spinner>
-
-                    <Spinner
-                        android:id="@+id/rightfilter_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/filter_array"
-                        android:gravity="center_horizontal">
-
-                    </Spinner>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/update_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/update_text"
-            android:onClick="updateChartButton"/>
-    </FrameLayout>
-    <ListView
-        android:id="@+id/nav_view"
+    <TextView
+        android:id="@+id/question_text"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content"/>
 
-    </ListView>
+    <Spinner
+        android:id="@+id/chartListSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="14pt" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:gravity="center"
+             android:orientation="vertical">
+
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="2"
+                 android:gravity="center"
+                 android:orientation="horizontal">
+                  <Spinner
+                      android:id="@+id/chart1_spinner"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:entries="@array/test_array"
+                      android:gravity="center_horizontal"></Spinner>
+                  <Spinner
+                      android:id="@+id/chart2_spinner"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:entries="@array/test_array"
+                      android:gravity="center_horizontal"></Spinner>
+             </LinearLayout>
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal">
+
+                 <RelativeLayout
+                     android:id="@+id/graph_container_left"
+                     android:layout_width="0dp"
+                     android:layout_height="350dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_alignParentTop="true"
+                     android:layout_weight="1"></RelativeLayout>
+
+                 <RelativeLayout
+                     android:id="@+id/graph_container_right"
+                     android:layout_width="0dp"
+                     android:layout_height="350dp"
+                     android:layout_weight="1">
+
+                 </RelativeLayout>
+             </LinearLayout>
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal"
+                 android:gravity="center">
+
+                 <Spinner
+                     android:id="@+id/leftfilter_spinner"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:entries="@array/filter_array"
+                     android:gravity="center_horizontal">
+                 </Spinner>
+
+                 <Spinner
+                     android:id="@+id/rightfilter_spinner"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:entries="@array/filter_array"
+                     android:gravity="center_horizontal">
+
+                 </Spinner>
+             </LinearLayout>
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal"
+                 android:gravity="center">
+
+                 <Button
+                     android:id="@+id/prev_button"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentLeft="true"
+                     android:text="@string/prev"/>
+                 <Button
+                     android:id="@+id/next_button"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentRight="true"
+                     android:text="@string/next"/>
+
+              </RelativeLayout>
+         </LinearLayout>
 
 
 
 
-</DrawerLayout>
+    </LinearLayout>
+     <Button
+         android:id="@+id/update_button"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/update_text"
+         android:onClick="updateChartButton"/>
+
+
+
+
+
+</LinearLayout>

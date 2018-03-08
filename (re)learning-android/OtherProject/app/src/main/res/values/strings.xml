@@ -38,4 +38,7 @@
     <string name="gallery">Gallery</string>
     <string name="slideshow">Slideshow</string>
     <string name="tools">Tools</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
+    <string name="load_database">Load Database</string>
 </resources>

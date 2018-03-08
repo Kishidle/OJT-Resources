@@ -714,4 +714,11 @@ public class ChartActivity extends AppCompatActivity {
 
 
     }
+    private void readFileName(){
+        //for getting the filenames of the dataset to be displayed in the program
+    }
+    private void computeChiStat(){
+
+
+    }
 }

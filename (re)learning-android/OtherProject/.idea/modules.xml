@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OtherProject.iml" filepath="$PROJECT_DIR$/OtherProject.iml" />
-      <module fileurl="file://C:\Users\Ramon\Documents\GitHub\OJT-Resources\(re)learning-android\OtherProject\OtherProject.iml" filepath="C:\Users\Ramon\Documents\GitHub\OJT-Resources\(re)learning-android\OtherProject\OtherProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Ramon\Documents\GitHub\OJT-Resources\(re)learning-android\OtherProject\app\app.iml" filepath="C:\Users\Ramon\Documents\GitHub\OJT-Resources\(re)learning-android\OtherProject\app\app.iml" />
     </modules>
   </component>
 </project>
