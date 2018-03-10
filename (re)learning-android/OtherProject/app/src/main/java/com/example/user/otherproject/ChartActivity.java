@@ -68,10 +68,12 @@ public class ChartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //TODO SQLite database or use the DatabaseHelper from GeeBee, whichever works better
-        //TODO relative layout instead of static charts in activity, so that charts can be added. check geebee source code on how -- done
-        //TODO replace spinner values with column headers from the synthetic dataset
+
         //TODO edit Child class to completely include the synthetic dataset
+        //TODO next and previous buttons
+        //TODO colored square box thing
+        //TODO back button to main menu
+        //TODO computations
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);

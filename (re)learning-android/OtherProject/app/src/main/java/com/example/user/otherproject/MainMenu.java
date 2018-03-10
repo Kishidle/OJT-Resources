@@ -3,6 +3,7 @@ package com.example.user.otherproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -14,7 +15,7 @@ public class MainMenu extends AppCompatActivity {
 
     //TODO: get database and store, make UI a little bit better/presentable
 
-    private void launchChartActivity(){
+    public void launchChartActivity(View view){
         Intent intent = new Intent(this, ChartActivity.class);
         startActivity(intent);
     }
