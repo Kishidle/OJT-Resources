@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.TextView;
 
 import com.example.user.otherproject.Controller.DBHelper;
 import com.example.user.otherproject.Model.Child;
@@ -62,7 +63,8 @@ public class ChartActivity extends AppCompatActivity {
     private int[] yDataLeft, yDataRight;
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
-    private int leftFilterNum, rightFilterNum;
+    private int leftFilterNum, rightFilterNum, questionNum;
+    private TextView questionText;
 
 
     @Override
@@ -80,6 +82,11 @@ public class ChartActivity extends AppCompatActivity {
 
         //mPie1=(PieChart) findViewById(R.id.piechart1);
         //mPie2=(PieChart) findViewById(R.id.piechart2);
+
+        questionNum = 1;
+        //preliminary set question text
+        questionText = (TextView) findViewById(R.id.question_text);
+        questionText.setText("Question " + Integer.toString(questionNum));
 
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
@@ -720,7 +727,21 @@ public class ChartActivity extends AppCompatActivity {
         //for getting the filenames of the dataset to be displayed in the program
     }
     private void computeChiStat(){
+        //compute Chi statistic
+        //display green/red box
+
+    }
+    public void setQuestionText(int questionNum){
+        //set questiontext on launch, and use on prevView() and nextView()
+
+    }
+}
+    public void prevView(View view){
 
 
+
+    public void nextView(View view){
+        questionNum++;
+        questionText.setText("Question " + Integer.toString(questionNum));
     }
 }
