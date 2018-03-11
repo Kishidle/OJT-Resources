@@ -8,10 +8,27 @@
     android:fitsSystemWindows="true">
 
 
-    <TextView
-        android:id="@+id/question_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="40dp"
+            android:layout_height="1dp" />
+        <TextView
+            android:id="@+id/question_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textSize="14sp"
+            android:text="@string/question_text"/>
+
+    </LinearLayout>
+
 
     <Spinner
         android:id="@+id/chartListSpinner"
@@ -106,13 +123,15 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentLeft="true"
-                     android:text="@string/prev"/>
+                     android:text="@string/prev"
+                     android:onClick="prevView"/>
                  <Button
                      android:id="@+id/next_button"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentRight="true"
-                     android:text="@string/next"/>
+                     android:text="@string/next"
+                     android:onClick="nextView"/>
 
               </RelativeLayout>
          </LinearLayout>
