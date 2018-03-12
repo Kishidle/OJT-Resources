@@ -65,6 +65,7 @@ public class ChartActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private int leftFilterNum, rightFilterNum, questionNum;
     private TextView questionText;
+    private View colorBar;
 
 
     @Override
@@ -72,10 +73,11 @@ public class ChartActivity extends AppCompatActivity {
 
 
         //TODO edit Child class to completely include the synthetic dataset
-        //TODO next and previous buttons
-        //TODO colored square box thing
-        //TODO back button to main menu
-        //TODO computations
+        //TODO next and previous buttons semi-done need to refresh/change the charts and stuff
+        //TODO colored square box thing done
+        //TODO back button to main menu done
+        //TODO get database for sample and the features
+        //TODO computations not started yet
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
@@ -87,6 +89,8 @@ public class ChartActivity extends AppCompatActivity {
         //preliminary set question text
         questionText = (TextView) findViewById(R.id.question_text);
         questionText.setText("Question " + Integer.toString(questionNum));
+
+        colorBar = (View) findViewById(R.id.colored_bar);
 
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
@@ -735,13 +739,19 @@ public class ChartActivity extends AppCompatActivity {
         //set questiontext on launch, and use on prevView() and nextView()
 
     }
-}
-    public void prevView(View view){
+
+    public void prevView(View view) {
+        colorBar.setBackgroundColor(Color.parseColor("#00FF00")); //green color
 
 
+
+    }
 
     public void nextView(View view){
         questionNum++;
         questionText.setText("Question " + Integer.toString(questionNum));
+        colorBar.setBackgroundColor(Color.parseColor("#FF0000"));
+
+
     }
 }
