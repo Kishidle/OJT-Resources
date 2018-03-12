@@ -17,6 +17,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     //TODO: get database and store, make UI a little bit better/presentable
+    //TODO: get features from InitialVarDesc
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == PICKFILE_RESULT_CODE){
