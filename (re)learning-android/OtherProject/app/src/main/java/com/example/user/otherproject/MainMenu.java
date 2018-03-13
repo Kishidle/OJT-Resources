@@ -1,7 +1,9 @@
 package com.example.user.otherproject;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,8 @@ import android.view.View;
 public class MainMenu extends AppCompatActivity {
 
     private static final int PICKFILE_RESULT_CODE = 1;
+    private Uri uri;
+    private String src;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +28,30 @@ public class MainMenu extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 //do stuff
                 //this is to get the filename of the datasets. not trimmed yet
-                Uri uri = data.getData();
-                String src = uri.getPath();
+                uri = data.getData();
+                src = getPath(uri);
+                Log.d("File URI: ", uri.toString());
                 Log.d("filename", src);
             }
         }
+    }
+    public String getPath(Uri uri) {
+
+        String path = null;
+        String[] projection = { MediaStore.Files.FileColumns.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+
+        if(cursor == null){
+            path = uri.getPath();
+        }
+        else{
+            cursor.moveToFirst();
+            int column_index = cursor.getColumnIndexOrThrow(projection[0]);
+            path = cursor.getString(column_index);
+            cursor.close();
+        }
+
+        return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
     }
 
     public void launchChartActivity(View view){
@@ -43,6 +66,13 @@ public class MainMenu extends AppCompatActivity {
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
 
+    }
+
+    public void loadFileFeature(View view){
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
     }
 
 }
