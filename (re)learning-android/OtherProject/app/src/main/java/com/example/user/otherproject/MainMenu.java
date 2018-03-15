@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.user.otherproject.Model.Child;
 import com.example.user.otherproject.Model.Question;
 
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ public class MainMenu extends AppCompatActivity {
     private Uri uri;
     private String src;
     private ArrayList<Question> questionList;
+    private ArrayList<Child> childListLeft, childListRight;
     private Question question;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +73,86 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void loadFile(View view){
 
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("*/*");
+    public void loadFileLeft(View view){
+        /*
+        Load hard-coded file from the left dataset button.
+         */
+
+        /*Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);*/
+        String fileCSV = "female_p.csv";
+        childListLeft = new ArrayList<>();
+        prepareData(fileCSV, childListLeft);
+
+
+
+    }
+    public void loadFileRight(View view){
+        /*
+        Loads hard-coded file from the right dataset button
+         */
+        String fileCSV = "male_p.csv";
+        childListRight = new ArrayList<>();
+        prepareData(fileCSV, childListRight);
+    }
+
+
+
+    public void prepareData(String fileCSV, ArrayList<Child> childList){
+        /*
+        Prepares data coming from the left and right dataset buttons, and adds them to the
+        corresponding arraylist.
+         */
+
+        AssetManager manager = this.getAssets();
+        InputStream inStream = null;
+        try{
+            inStream = manager.open(fileCSV);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line = "";
+        boolean isHeader = true;
+        try{
+            while((line = buffer.readLine()) != null){
+                if(isHeader){
+                    isHeader = false;
+                }
+                else{
+                    String[] col = line.split(",");
+                    Child child = new Child();
+                    child.setChildID(col[0].trim());
+
+                    ArrayList<String> childResponses = new ArrayList<>();
+                    for(int i = 1; i < col.length; i++){
+                        childResponses.add(col[i].trim());
+                    }
+                    child.setChildResponses(childResponses);
+                    childList.add(child);
+                }
+
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
 
     }
 
     public void loadFileFeature(View view){
+        /*
+        Loads hard-coded file from the feature button. This function already prepares the Question
+        arraylist.
+         */
         //Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         //chooseFile.setType("*/*");
         //chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         //startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+        //TODO load files from cloud
         String featureCSV = "InitialVarDesc.csv";
         AssetManager manager = this.getAssets();
         InputStream inStream = null;
@@ -100,7 +168,9 @@ public class MainMenu extends AppCompatActivity {
         boolean isFirst = true;
         try{
             while((line = buffer.readLine()) != null){
+                Log.d("lineread", line);
                 String[] col = line.split(",");
+                Log.d("numberofcolumns", Integer.toString(col.length));
 
                 if(col[0].trim().equals("^")){
                     // new class
@@ -113,6 +183,7 @@ public class MainMenu extends AppCompatActivity {
                     question = new Question();
                     question.setQuestionNum(col[1].trim());
                     question.setQuestionText(col[2].trim());
+                    Log.d("questionNum", col[1].trim());
 
                 }
                 else{

@@ -27,13 +27,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/load_database" />
+                android:text="@string/load_dataset"
+                android:onClick="loadFileLeft"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="test"
-                android:onClick="loadFile"/>
+                android:text="@string/load_dataset2"
+                android:onClick="loadFileRight"/>
 
 
         </LinearLayout>
