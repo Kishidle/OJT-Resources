@@ -16,16 +16,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class MainMenu extends AppCompatActivity {
 
     private static final int PICKFILE_RESULT_CODE = 1;
     private Uri uri;
     private String src;
+    private ArrayList<Question> questionList;
+    private Question question;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        questionList = new ArrayList<>();
     }
 
     //TODO: get database and store, make UI a little bit better/presentable
@@ -92,7 +96,7 @@ public class MainMenu extends AppCompatActivity {
 
         BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
         String line = "";
-        Question question;
+
         boolean isFirst = true;
         try{
             while((line = buffer.readLine()) != null){
@@ -102,13 +106,20 @@ public class MainMenu extends AppCompatActivity {
                     // new class
                     if(!isFirst){
                         //add to arraylist
+                        questionList.add(question);
+
                     }
                     isFirst = false;
                     question = new Question();
+                    question.setQuestionNum(col[1].trim());
+                    question.setQuestionText(col[2].trim());
 
                 }
                 else{
                     //new features
+                    question.setFeatureGroup(col[0].trim());
+                    question.setFeatureNum(Integer.parseInt(col[1].trim()));
+                    question.setFeatureText(col[2].trim());
                 }
 
             }
