@@ -30,13 +30,6 @@
     </LinearLayout>
 
 
-    <Spinner
-        android:id="@+id/chartListSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="14pt" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
@@ -47,25 +40,7 @@
              android:gravity="center"
              android:orientation="vertical">
 
-             <LinearLayout
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="2"
-                 android:gravity="center"
-                 android:orientation="horizontal">
-                  <Spinner
-                      android:id="@+id/chart1_spinner"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:entries="@array/test_array"
-                      android:gravity="center_horizontal"></Spinner>
-                  <Spinner
-                      android:id="@+id/chart2_spinner"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:entries="@array/test_array"
-                      android:gravity="center_horizontal"></Spinner>
-             </LinearLayout>
+
 
              <LinearLayout
                  android:layout_width="match_parent"
@@ -95,29 +70,7 @@
                  android:layout_height="40dp"
                  android:background="@color/red"/>
 
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:orientation="horizontal"
-                 android:gravity="center">
 
-                 <Spinner
-                     android:id="@+id/leftfilter_spinner"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:entries="@array/filter_array"
-                     android:gravity="center_horizontal">
-                 </Spinner>
-
-                 <Spinner
-                     android:id="@+id/rightfilter_spinner"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:entries="@array/filter_array"
-                     android:gravity="center_horizontal">
-
-                 </Spinner>
-             </LinearLayout>
              <RelativeLayout
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"

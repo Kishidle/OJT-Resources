@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.user.otherproject.Model.Child;
 import com.example.user.otherproject.Model.Question;
@@ -27,6 +28,7 @@ public class MainMenu extends AppCompatActivity {
     private ArrayList<Question> questionList;
     private ArrayList<Child> childListLeft, childListRight;
     private Question question;
+    private String fileCSVLeft, fileCSVRight, featureCSV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,12 @@ public class MainMenu extends AppCompatActivity {
 
     public void launchChartActivity(View view){
         Intent intent = new Intent(this, ChartActivity.class);
+        intent.putExtra("listLeft", fileCSVLeft);
+        intent.putExtra("listRight", fileCSVRight);
+        intent.putExtra("featureList", featureCSV);
+        //intent.putExtra("listLeft", childListLeft);
+        //ntent.putExtra("listRight", childListRight);
+        //intent.putExtra("questionList", questionList);
         startActivity(intent);
     }
 
@@ -83,20 +91,18 @@ public class MainMenu extends AppCompatActivity {
         chooseFile.setType("*");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);*/
-        String fileCSV = "female_p.csv";
+        fileCSVLeft = "female_p.csv";
         childListLeft = new ArrayList<>();
-        prepareData(fileCSV, childListLeft);
-
-
+        prepareData(fileCSVLeft, childListLeft);
 
     }
     public void loadFileRight(View view){
         /*
         Loads hard-coded file from the right dataset button
          */
-        String fileCSV = "male_p.csv";
+        fileCSVRight = "male_p.csv";
         childListRight = new ArrayList<>();
-        prepareData(fileCSV, childListRight);
+        prepareData(fileCSVRight, childListRight);
     }
 
 
@@ -141,6 +147,8 @@ public class MainMenu extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Toast.makeText(MainMenu.this, "Added dataset!", Toast.LENGTH_LONG).show();
+
     }
 
     public void loadFileFeature(View view){
@@ -153,7 +161,7 @@ public class MainMenu extends AppCompatActivity {
         //chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         //startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
         //TODO load files from cloud
-        String featureCSV = "InitialVarDesc.csv";
+        featureCSV = "InitialVarDesc.csv";
         AssetManager manager = this.getAssets();
         InputStream inStream = null;
         try{
@@ -188,9 +196,9 @@ public class MainMenu extends AppCompatActivity {
                 }
                 else{
                     //new features
-                    question.setFeatureGroup(col[0].trim());
-                    question.setFeatureNum(Integer.parseInt(col[1].trim()));
-                    question.setFeatureText(col[2].trim());
+                    //question.setFeatureGroup(col[0].trim());
+                    //question.setFeatureNum(Integer.parseInt(col[1].trim()));
+                    //question.setFeatureText(col[2].trim());
                 }
 
             }
@@ -198,6 +206,7 @@ public class MainMenu extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Toast.makeText(MainMenu.this, "Added feature dataset!", Toast.LENGTH_LONG).show();
 
     }
 

@@ -15,9 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.otherproject.Controller.DBHelper;
 import com.example.user.otherproject.Model.Child;
+import com.example.user.otherproject.Model.Question;
 import com.example.user.otherproject.Model.ValueCounter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -47,17 +49,11 @@ public class ChartActivity extends AppCompatActivity {
 
     private PieChart mPieLeft;
     private PieChart mPieRight;
-    private LineChart lineChart;
-    private BarChart barChart;
-    private Spinner mSpin1, mSpin2, mChartSpin, mLeftFilterSpin, mRightFilterSpin;
-    private String mFilter1, mFilter2, mChartSelected, mLeftFilter, mRightFilter;
-
-    private ArrayList<Child> childList;
+    private ArrayList<Child> childListLeft, childListRight;
     private ArrayList<Child> filteredList;
-    private Child childData1, childData2, childData3, childData4, childData5;
-    private Button mUpdateBtn;
     private ArrayList<PieEntry> pieEntries1;
     private ArrayList<PieEntry> pieEntries2;
+    private ArrayList<Question> questionList;
     private RelativeLayout graphLayoutLeft, graphLayoutRight;
     private String xData, xDataRight;
     private int[] yDataLeft, yDataRight;
@@ -66,6 +62,7 @@ public class ChartActivity extends AppCompatActivity {
     private int leftFilterNum, rightFilterNum, questionNum;
     private TextView questionText;
     private View colorBar;
+    private Question question;
 
 
     @Override
@@ -82,6 +79,19 @@ public class ChartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
+        String fileCSVLeft = getIntent().getStringExtra("listLeft");
+        String fileCSVRight = getIntent().getStringExtra("listRight");
+        String featureCSV = getIntent().getStringExtra("featureList");
+
+        childListLeft = new ArrayList<Child>();
+        childListRight = new ArrayList<Child>();
+        questionList = new ArrayList<Question>();
+        prepareDataset(fileCSVLeft, childListLeft);
+        prepareDataset(fileCSVRight, childListRight);
+        prepareFeatures(featureCSV, questionList);
+
+        Log.d("intenttest", questionList.get(0).getFeatureText().get(0));
+
         //mPie1=(PieChart) findViewById(R.id.piechart1);
         //mPie2=(PieChart) findViewById(R.id.piechart2);
 
@@ -95,196 +105,13 @@ public class ChartActivity extends AppCompatActivity {
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
 
-        mSpin1=(Spinner) findViewById(R.id.chart1_spinner);
-        mSpin2=(Spinner) findViewById(R.id.chart2_spinner);
-        mChartSpin=(Spinner) findViewById(R.id.chartListSpinner);
-        mLeftFilterSpin = (Spinner) findViewById(R.id.leftfilter_spinner);
-        mRightFilterSpin = (Spinner) findViewById(R.id.rightfilter_spinner);
-
-
         pieEntries1 = new ArrayList<>();
         pieEntries2 = new ArrayList<>();
-        childList = new ArrayList<>();
+        //childList = new ArrayList<>();
         filteredList = new ArrayList<>();
-
-        mFilter1 = "";
-        mFilter2 = "";
-        mChartSelected = "";
-        mLeftFilter = "All";
-        mRightFilter = "All";
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.test_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpin1.setAdapter(adapter);
-        mSpin2.setAdapter(adapter);
-
-        ArrayAdapter<CharSequence> chartAdapter = ArrayAdapter.createFromResource(this, R.array.chart_array, android.R.layout.simple_spinner_item);
-        mChartSpin.setAdapter(chartAdapter);
-
-        ArrayAdapter<CharSequence> filterAdapter = ArrayAdapter.createFromResource(this, R.array.filter_array, android.R.layout.simple_spinner_item);
-        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mLeftFilterSpin.setAdapter(filterAdapter);
-        mRightFilterSpin.setAdapter(filterAdapter);
-
-        //mDBHelper = new DBHelper(this);
-
-        mSpin1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mFilter1 = mSpin1.getSelectedItem().toString();
-                //prepareChart();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSpin2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mFilter2 = mSpin2.getSelectedItem().toString();
-                //prepareChart();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mLeftFilterSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
-                Log.d("leftfilter", "it went here lol");
-                mLeftFilter = mLeftFilterSpin.getSelectedItem().toString();
-                if(!mLeftFilter.equals("All")){
-                    /*
-                    Pattern p = Pattern.compile("\"-?\\\\d+");
-                    Matcher m = p.matcher(mLeftFilter);
-                    Log.d("leftfiltertest", mLeftFilter);
-                    while(m.find()){
-                        leftFilterNum = Integer.parseInt(m.group());
-                    }*/
-                    leftFilterNum = i;
-                    Log.d("leftfilternum", Integer.toString(leftFilterNum));
-
-                }
-                //prepareChart();
-
-            }
-
-            public void onNothingSelected(AdapterView<?> adapterView){
-
-            }
-        });
-
-        mRightFilterSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
-
-                mRightFilter = mRightFilterSpin.getSelectedItem().toString();
-                if(!mRightFilterSpin.getSelectedItem().toString().equals("All")){
-                    /*
-                    Pattern p = Pattern.compile("\"-?\\\\d+");
-                    Matcher m = p.matcher(mRightFilterSpin.getSelectedItem().toString());
-                    while(m.find()){
-                        rightFilterNum = Integer.parseInt(m.group());
-                    }
-                    */
-                    rightFilterNum = i;
-
-                }
-                //prepareChart();
-
-            }
-
-            public void onNothingSelected(AdapterView<?> adapterView){
-
-            }
-        });
-
-
-
-        //TODO MOST UPDATED TEST SQLITEDATABASE AND DO FILTERS
-        //TODO add function to choose which type of chart to use. default = pie chart. also add filtering by region, etc.
-
-
-        //importCSV();
-
-
-        mFilter1 = "BMI";
-        mFilter2 = "BMI";
-        Log.d("mfiltertest", mFilter1);
         Log.d("hitest", "testing it started here");
         //createCharts();
         //prepareChartData();
-
-        mChartSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
-                //adding charts to the two RelativeLayouts
-                mChartSelected = mChartSpin.getSelectedItem().toString();
-                ViewGroup.LayoutParams paramsLeft, paramsRight;
-                graphLayoutLeft.removeAllViews();
-                graphLayoutRight.removeAllViews();
-
-                if(mChartSelected.equals("Pie Chart")){
-                    graphLayoutLeft.addView(mPieLeft);
-                    graphLayoutRight.addView(mPieRight);
-
-                    //adjust the size
-                    Log.d("charttag", "did it go here?");
-                    paramsLeft = mPieLeft.getLayoutParams();
-                    paramsRight = mPieRight.getLayoutParams();
-
-                    paramsRight.height = 400;
-                    paramsRight.width = 400;
-                }
-                else{
-                    graphLayoutLeft.addView(barChart);
-                    paramsLeft = barChart.getLayoutParams();
-                }
-
-                if(!mChartSelected.equals("Pie Chart")){
-                    graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0f));
-                }
-                else{
-                    //graphLayoutRight.setLayoutParams(new LinearLayout.LayoutParams(400, 400, 1f));
-                }
-
-                paramsLeft.width = 400;
-                paramsLeft.height = 400;
-
-                //prepareChart();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView){
-
-                mChartSelected = "Pie Chart";
-                graphLayoutLeft.addView(mPieLeft);
-                graphLayoutRight.addView(mPieRight);
-
-                ViewGroup.LayoutParams params = mPieLeft.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-
-                ViewGroup.LayoutParams paramsRight = mPieRight.getLayoutParams();
-                paramsRight.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-
-                Log.d("onnothing", "test");
-
-                //prepareChart();
-            }
-
-        });
-
-
 
     }
 
@@ -296,7 +123,108 @@ public class ChartActivity extends AppCompatActivity {
     }
 
 
-    
+    public void prepareDataset(String fileCSV, ArrayList<Child> childList){
+        /*
+        Prepares data coming from the left and right dataset buttons, and adds them to the
+        corresponding arraylist.
+         */
+
+        AssetManager manager = this.getAssets();
+        InputStream inStream = null;
+        try{
+            inStream = manager.open(fileCSV);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line = "";
+        boolean isHeader = true;
+        try{
+            while((line = buffer.readLine()) != null){
+                if(isHeader){
+                    isHeader = false;
+                }
+                else{
+                    String[] col = line.split(",");
+                    Child child = new Child();
+                    child.setChildID(col[0].trim());
+
+                    ArrayList<String> childResponses = new ArrayList<>();
+                    for(int i = 1; i < col.length; i++){
+                        childResponses.add(col[i].trim());
+                    }
+                    child.setChildResponses(childResponses);
+                    childList.add(child);
+                }
+
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //Toast.makeText(Mai.this, "Added dataset!", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void prepareFeatures(String featureCSV, ArrayList<Question> questionList){
+        /*
+        Loads hard-coded file from the feature button. This function already prepares the Question
+        arraylist.
+         */
+        //Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        //chooseFile.setType("*/*");
+        //chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        //startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+        //TODO load files from cloud
+
+        AssetManager manager = this.getAssets();
+        InputStream inStream = null;
+        try{
+            inStream = manager.open(featureCSV);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line = "";
+
+        boolean isFirst = true;
+        try{
+            while((line = buffer.readLine()) != null){
+                Log.d("lineread", line);
+                String[] col = line.split(",");
+                Log.d("numberofcolumns", Integer.toString(col.length));
+
+                if(col[0].trim().equals("^")){
+                    // new class
+                    if(!isFirst){
+                        //add to arraylist
+                        questionList.add(question);
+
+                    }
+                    isFirst = false;
+                    question = new Question();
+                    question.setQuestionNum(col[1].trim());
+                    question.setQuestionText(col[2].trim());
+                    Log.d("questionNum", col[1].trim());
+
+                }
+                else{
+                    //new features
+                    question.addFeatureGroup(col[0].trim());
+                    question.addFeatureNum(Integer.parseInt(col[1].trim()));
+                    question.addFeatureText(col[2].trim());
+                }
+
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //Toast.makeText(MainMenu.this, "Added feature dataset!", Toast.LENGTH_LONG).show();
+
+    }
 
     /*private ArrayList<Child> filterChild(String position){
         filteredList = new ArrayList<>();
@@ -316,10 +244,6 @@ public class ChartActivity extends AppCompatActivity {
 
 
     }*/
-
-
-
-
 
     private PieChart createPieChart(){
 
