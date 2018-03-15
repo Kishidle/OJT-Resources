@@ -1,6 +1,7 @@
 package com.example.user.otherproject;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -8,6 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.example.user.otherproject.Model.Question;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -69,10 +77,46 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void loadFileFeature(View view){
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("*/*");
-        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+        //Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        //chooseFile.setType("*/*");
+        //chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        //startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+        String featureCSV = "InitialVarDesc.csv";
+        AssetManager manager = this.getAssets();
+        InputStream inStream = null;
+        try{
+            inStream = manager.open(featureCSV);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line = "";
+        Question question;
+        boolean isFirst = true;
+        try{
+            while((line = buffer.readLine()) != null){
+                String[] col = line.split(",");
+
+                if(col[0].trim().equals("^")){
+                    // new class
+                    if(!isFirst){
+                        //add to arraylist
+                    }
+                    isFirst = false;
+                    question = new Question();
+
+                }
+                else{
+                    //new features
+                }
+
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+
     }
 
 }
