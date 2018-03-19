@@ -21,6 +21,7 @@ public class OOTOPrepare {
 
     private ArrayList<Question> questionList;
     private Question question;
+    private ArrayList<Child> childListLeft, childListRight;
 
     public OOTOPrepare(){
 
@@ -50,6 +51,15 @@ public class OOTOPrepare {
                     if(!isHeader){
                         questionList.add(question);
                     }
+                    isHeader = false;
+                    question = new Question();
+                    question.setQuestionNum(col[1].trim());
+                    question.setQuestionText(col[2].trim());
+                }
+                else{
+                    question.addFeatureGroup(col[0].trim());
+                    question.addFeatureNum(Integer.parseInt(col[1].trim()));
+                    question.addFeatureText(col[2].trim());
                 }
 
             }
@@ -58,5 +68,39 @@ public class OOTOPrepare {
         } catch(IOException e){
             e.printStackTrace();
         }
+    }
+    
+    public void prepareDataset(String fileCSV, ArrayList<Child> childList){
+        
+        InputStream inStream = null;
+        File file = new File(fileCSV);
+        String line = "";
+        boolean isHeader = true;
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            while((line = br.readLine()) != null){
+                if(isHeader){
+                    isHeader = false;
+                }
+                else{
+                    String[] col = line.split(",");
+                    Child child = new Child();
+                    child.setChildID(col[0].trim());
+                    
+                    ArrayList<String> childResponses = new ArrayList<>();
+                    for(int i = 1; i < col.length; i++){
+                        childResponses.add(col[i].trim());
+                    }
+                    child.setChildResponses(childResponses);
+                    childList.add(child);
+                }
+            }   
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void trimPopulation(){
+        
     }
 }
