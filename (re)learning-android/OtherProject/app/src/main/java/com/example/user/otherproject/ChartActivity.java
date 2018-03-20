@@ -60,7 +60,7 @@ public class ChartActivity extends AppCompatActivity {
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
     private int leftFilterNum, rightFilterNum;
-    private TextView questionText;
+    private TextView questionText, resultText;
     private View colorBar;
     private Question question;
     private int questionNum = 0;
@@ -106,7 +106,7 @@ public class ChartActivity extends AppCompatActivity {
         questionText = (TextView) findViewById(R.id.question_text);
         questionText.setText("Question " + questionLabel + ": " + questionString);
 
-        colorBar = (View) findViewById(R.id.colored_bar);
+        resultText = (TextView) findViewById(R.id.result_text);
 
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
@@ -296,7 +296,8 @@ public class ChartActivity extends AppCompatActivity {
         // customize legends
         Legend l = pieChart.getLegend();
 
-        l.setPosition(Legend.LegendPosition.LEFT_OF_CHART_CENTER);
+        l.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        //l.setTextSize(16);
         l.setWordWrapEnabled(true);
         //l.setTextSize(R.dimen.context_text_size);
         l.setTextColor(Color.BLACK);
@@ -310,13 +311,19 @@ public class ChartActivity extends AppCompatActivity {
 
         List<PieEntry> pieEntries = new ArrayList<>();
         String[] pieLabels = {"No", "Yes"};
-        ArrayList<Float> pieValues = computeValue2(childList, test);
+
+        ValueCounter valueCounter = new ValueCounter(childList, questionNum);
+        valueCounter.setResponse();
+        int[] valueCount = valueCounter.getResponse();
+
+        ArrayList<Float> pieValues = computeValue2(childList, test, valueCount);
+
 
         Log.d("valuesize", Integer.toString(pieValues.size()));
         for(int i = 0; i < pieValues.size(); i++){
             Log.d("Pie Values", pieValues.get(i).toString());
 
-            pieEntries.add(new PieEntry(pieValues.get(i), pieLabels[i]));
+            pieEntries.add(new PieEntry(pieValues.get(i), pieLabels[i] + "(" + valueCount[i] + ")"));
         }
         String label = questionList.get(questionNum).getQuestionLabel();
 
@@ -330,19 +337,13 @@ public class ChartActivity extends AppCompatActivity {
         data.setValueTextSize(18f);
         data.setValueTextColor(Color.BLACK);
         pieChart.setData(data);
-        Description desc = new Description();
-        desc.setText(label);
-        pieChart.setDescription(desc);
         pieChart.invalidate();
 
 
     }
-    private ArrayList<Float> computeValue2(ArrayList<Child> childList, String test){
+    private ArrayList<Float> computeValue2(ArrayList<Child> childList, String test, int[] valueCount){
         totalCount = 0;
-        ValueCounter valueCounter = new ValueCounter(childList, questionNum);
-        valueCounter.setResponse();
 
-        int[] valueCount = valueCounter.getResponse();
         if(test.equals("left"))
             yesLeft = valueCount[1];
         else if(test.equals("right")){
@@ -405,11 +406,17 @@ public class ChartActivity extends AppCompatActivity {
         Log.d("z-value", Double.toString(z));
         double z2 = Math.pow(z, 2);
         Log.d("pow", Double.toString(z2));
+
+        //TODO change this to text "within normal bounds", and "out of the ordinary(ooto)" with confidence interval and the z-score at the beginning
+        //TODO change color of pie chart
+        //TODO place pie chart legends at the bottom and include the number of respondents
+        double zRound = Math.round(z * 100.00) / 100.00;
         if(z <= 2.58){ // 99% confidence interval
-            colorBar.setBackgroundColor(Color.parseColor("#00FF00"));
+            resultText.setText("Z-score: " + Double.toString(zRound) + " -Within Normal Bounds- at 99% confidence interval");
         }
         else if(z > 2.58){
-            colorBar.setBackgroundColor(Color.parseColor("#FF0000"));
+            resultText.setText("Z-score: " + Double.toString(zRound) + " -Out of the Ordinary(OOTO)- at 99% confidence interval");
+
         }
 
         //compute Chi statistic
@@ -431,6 +438,7 @@ public class ChartActivity extends AppCompatActivity {
 
         preparePieChartData2(mPieLeft, childListLeft, "left");
         preparePieChartData2(mPieRight, childListRight, "right");
+        computeChiStat();
 
 
 
@@ -447,6 +455,7 @@ public class ChartActivity extends AppCompatActivity {
 
         preparePieChartData2(mPieLeft, childListLeft, "left");
         preparePieChartData2(mPieRight, childListRight, "right");
+        computeChiStat();
 
 
     }

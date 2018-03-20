@@ -64,11 +64,12 @@
                  </RelativeLayout>
              </LinearLayout>
              
-             <View
-                 android:id="@+id/colored_bar"
-                 android:layout_width="45dp"
-                 android:layout_height="40dp"
-                 android:background="@color/red"/>
+             <TextView
+                 android:id="@+id/result_text"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textSize="18dp"
+                 android:layout_gravity="center"/>
 
 
              <RelativeLayout
