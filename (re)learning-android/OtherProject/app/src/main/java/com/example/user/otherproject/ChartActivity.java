@@ -410,6 +410,9 @@ public class ChartActivity extends AppCompatActivity {
         //TODO change this to text "within normal bounds", and "out of the ordinary(ooto)" with confidence interval and the z-score at the beginning
         //TODO change color of pie chart
         //TODO place pie chart legends at the bottom and include the number of respondents
+        //TODO get name of dataset
+        //TODO searching of question
+        //TODO filter in main menu
         double zRound = Math.round(z * 100.00) / 100.00;
         if(z <= 2.58){ // 99% confidence interval
             resultText.setText("Z-score: " + Double.toString(zRound) + " -Within Normal Bounds- at 99% confidence interval");
