@@ -12,7 +12,8 @@ import java.util.ArrayList;
 public class Question implements Parcelable {
 
     private String questionText;
-    private String questionNum;
+    private int questionNum;
+    private String questionLabel;
     private ArrayList<String> featureGroup;
     private ArrayList<Integer> featureNum;
     private ArrayList<String> featureText;
@@ -31,11 +32,19 @@ public class Question implements Parcelable {
         this.questionText = questionText;
     }
 
-    public String getQuestionNum() {
+    public String getQuestionLabel() {
+        return questionLabel;
+    }
+
+    public void setQuestionLabel(String questionNum) {
+        this.questionLabel = questionNum;
+    }
+
+    public int getQuestionNum(){
         return questionNum;
     }
 
-    public void setQuestionNum(String questionNum) {
+    public void setQuestionNum(int questionNum){
         this.questionNum = questionNum;
     }
 
@@ -69,7 +78,7 @@ public class Question implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags){
         out.writeString(questionText);
-        out.writeString(questionNum);
+        out.writeString(questionLabel);
         //out.writeString(featureGroup);
         //out.writeInt(featureNum);
         //out.writeString(featureText);
@@ -90,7 +99,7 @@ public class Question implements Parcelable {
 
     private Question(Parcel in){
         questionText = in.readString();
-        questionNum = in.readString();
+        questionLabel = in.readString();
         //featureGroup = in.readString();
         //featureNum = in.readInt();
         //featureText = in.readString();

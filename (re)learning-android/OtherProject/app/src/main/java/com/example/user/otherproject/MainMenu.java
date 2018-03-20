@@ -91,7 +91,7 @@ public class MainMenu extends AppCompatActivity {
         chooseFile.setType("*");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);*/
-        fileCSVLeft = "female_p.csv";
+        fileCSVLeft = "female_p_test.csv";
         childListLeft = new ArrayList<>();
         prepareData(fileCSVLeft, childListLeft);
 
@@ -100,7 +100,7 @@ public class MainMenu extends AppCompatActivity {
         /*
         Loads hard-coded file from the right dataset button
          */
-        fileCSVRight = "male_p.csv";
+        fileCSVRight = "male_p_test.csv";
         childListRight = new ArrayList<>();
         prepareData(fileCSVRight, childListRight);
     }
@@ -161,7 +161,7 @@ public class MainMenu extends AppCompatActivity {
         //chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         //startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
         //TODO load files from cloud
-        featureCSV = "InitialVarDesc.csv";
+        featureCSV = "InitialVarDescTemp.csv";
         AssetManager manager = this.getAssets();
         InputStream inStream = null;
         try{
@@ -189,7 +189,7 @@ public class MainMenu extends AppCompatActivity {
                     }
                     isFirst = false;
                     question = new Question();
-                    question.setQuestionNum(col[1].trim());
+                    question.setQuestionLabel(col[1].trim());
                     question.setQuestionText(col[2].trim());
                     Log.d("questionNum", col[1].trim());
 
