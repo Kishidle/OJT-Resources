@@ -67,6 +67,7 @@ public class ChartActivity extends AppCompatActivity {
     private int totalCount = 0;
     private ValueCounter vCountLeft, vCountRight;
     private int yesLeft, yesRight;
+    private int[] answerCount;
 
 
 
@@ -123,11 +124,11 @@ public class ChartActivity extends AppCompatActivity {
 
         ViewGroup.LayoutParams params = mPieLeft.getLayoutParams();
         params.height = 400;
-        params.width = 400;
+        params.width = 450;
 
         ViewGroup.LayoutParams paramsRight = mPieRight.getLayoutParams();
         paramsRight.height = 400;
-        paramsRight.width = 400;
+        paramsRight.width = 450;
 
         preparePieChartData2(mPieLeft, childListLeft, "left");
         preparePieChartData2(mPieRight, childListRight, "right");
@@ -310,44 +311,62 @@ public class ChartActivity extends AppCompatActivity {
     private void preparePieChartData2(PieChart pieChart, ArrayList<Child> childList, String test){
 
         List<PieEntry> pieEntries = new ArrayList<>();
-        String[] pieLabels = {"No", "Yes"};
+        String[] pieLabels = questionList.get(questionNum).getFeatureText().toArray(new String[0]);
 
-        ValueCounter valueCounter = new ValueCounter(childList, questionNum);
+        ValueCounter valueCounter = new ValueCounter(childList, questionNum, questionList);
         valueCounter.setResponse();
-        int[] valueCount = valueCounter.getResponse();
+        int[] pieCount = valueCounter.getResponse();
+        answerCount = valueCounter.getGroup();
 
-        ArrayList<Float> pieValues = computeValue2(childList, test, valueCount);
+        ArrayList<Float> pieValues = computeValue2(childList, test, pieCount, answerCount);
 
 
         Log.d("valuesize", Integer.toString(pieValues.size()));
         for(int i = 0; i < pieValues.size(); i++){
             Log.d("Pie Values", pieValues.get(i).toString());
 
-            pieEntries.add(new PieEntry(pieValues.get(i), pieLabels[i] + "(" + valueCount[i] + ")"));
+            pieEntries.add(new PieEntry(pieValues.get(i), pieLabels[i] + "(" + pieCount[i] + ")"));
+
         }
         String label = questionList.get(questionNum).getQuestionLabel();
+        ArrayList<Integer> colorList = new ArrayList<>();
+        for(int i = 0; i < questionList.get(questionNum).getFeatureNum().size(); i++){
+            if(questionList.get(questionNum).getFeatureGroup().get(i).equals("a")){
+                Log.d("doesitgoherepls", "test");
 
+                colorList.add(getResources().getColor(R.color.green));
+            }
+            else if(questionList.get(questionNum).getFeatureGroup().get(i).equals("b")){
+
+                colorList.add(getResources().getColor(R.color.blue));
+            }
+        }
         PieDataSet set = new PieDataSet(pieEntries, "");
 
+
         set.setSliceSpace(4f);
-        set.setColors(ColorTemplate.MATERIAL_COLORS);
+        set.setColors(colorList);
 
         PieData data = new PieData(set);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(18f);
         data.setValueTextColor(Color.BLACK);
         pieChart.setData(data);
+        Description description = new Description();
+        description.setText("");
+        pieChart.setDescription(description);
+        pieChart.animateXY(1500, 1500);
         pieChart.invalidate();
 
 
     }
-    private ArrayList<Float> computeValue2(ArrayList<Child> childList, String test, int[] valueCount){
+    private ArrayList<Float> computeValue2(ArrayList<Child> childList, String test, int[] valueCount, int[] answerCount){
         totalCount = 0;
 
         if(test.equals("left"))
-            yesLeft = valueCount[1];
+            yesLeft = answerCount[1];
         else if(test.equals("right")){
-            yesRight = valueCount[1];
+            yesRight = answerCount[1];
         }
         Log.d("z-test2", Integer.toString(valueCount[1]));
 
@@ -402,7 +421,7 @@ public class ChartActivity extends AppCompatActivity {
         double sep = Math.sqrt((pHat * (1 - pHat)) * (1 / childLeftSize + 1 / childRightSize));
         Log.d("phat", Double.toString(pHat));
         Log.d("sep", Double.toString(sep));
-        double z = (leftDouble - rightDouble) / sep;
+        double z = Math.abs((leftDouble - rightDouble) / sep);
         Log.d("z-value", Double.toString(z));
         double z2 = Math.pow(z, 2);
         Log.d("pow", Double.toString(z2));
@@ -414,10 +433,10 @@ public class ChartActivity extends AppCompatActivity {
         //TODO searching of question
         //TODO filter in main menu
         double zRound = Math.round(z * 100.00) / 100.00;
-        if(z <= 2.58){ // 99% confidence interval
+        if(zRound <= 2.58){ // 99% confidence interval
             resultText.setText("Z-score: " + Double.toString(zRound) + " -Within Normal Bounds- at 99% confidence interval");
         }
-        else if(z > 2.58){
+        else if(zRound > 2.58){
             resultText.setText("Z-score: " + Double.toString(zRound) + " -Out of the Ordinary(OOTO)- at 99% confidence interval");
 
         }

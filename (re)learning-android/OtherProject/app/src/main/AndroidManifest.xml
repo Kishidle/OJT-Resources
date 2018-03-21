@@ -10,7 +10,9 @@
         android:screenOrientation="landscape"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainMenu">
+        <activity
+            android:name=".MainMenu"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +27,8 @@
         <activity
             android:name=".ChartActivity"
             android:screenOrientation="landscape"
-            android:parentActivityName=".MainMenu">
+            android:parentActivityName=".MainMenu"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
     </application>
