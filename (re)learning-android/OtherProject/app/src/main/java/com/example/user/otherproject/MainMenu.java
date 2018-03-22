@@ -91,7 +91,7 @@ public class MainMenu extends AppCompatActivity {
         chooseFile.setType("*");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);*/
-        fileCSVLeft = "female_p_test_num.csv";
+        fileCSVLeft = "female_p_test_800.csv";
         childListLeft = new ArrayList<>();
         prepareData(fileCSVLeft, childListLeft);
 
@@ -100,7 +100,7 @@ public class MainMenu extends AppCompatActivity {
         /*
         Loads hard-coded file from the right dataset button
          */
-        fileCSVRight = "male_p_test_num.csv";
+        fileCSVRight = "male_p_test_800.csv";
         childListRight = new ArrayList<>();
         prepareData(fileCSVRight, childListRight);
     }

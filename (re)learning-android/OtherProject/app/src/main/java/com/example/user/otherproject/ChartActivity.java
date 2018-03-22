@@ -1,12 +1,16 @@
 package com.example.user.otherproject;
 
+import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,7 +65,7 @@ public class ChartActivity extends AppCompatActivity {
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
     private int leftFilterNum, rightFilterNum;
-    private TextView resultText, questionDesc;
+    private TextView resultText, questionDesc, leftDetails, rightDetails;
     private EditText questionCode;
     private View colorBar;
     private Question question;
@@ -103,6 +107,9 @@ public class ChartActivity extends AppCompatActivity {
         //mPie1=(PieChart) findViewById(R.id.piechart1);
         //mPie2=(PieChart) findViewById(R.id.piechart2);
 
+        leftDetails = (TextView) findViewById(R.id.leftDetails);
+        rightDetails = (TextView) findViewById(R.id.rightDetails);
+
         questionLabel = questionList.get(0).getQuestionLabel();
         questionString = questionList.get(0).getQuestionText();
         //preliminary set question text
@@ -110,11 +117,27 @@ public class ChartActivity extends AppCompatActivity {
         questionCode = (EditText) findViewById(R.id.question_code);
 
         questionCode.setText(questionLabel);
-
         questionDesc.setText(": "+ questionString);
-
         resultText = (TextView) findViewById(R.id.result_text);
 
+        questionCode.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
+                String input;
+                Log.d("oneditortest2", "test");
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    Log.d("oneditortest", v.getText().toString());
+                    input = v.getText().toString();
+                    questionCode.clearFocus();
+                    hideKeyboard(v);
+                    findQuestion(input);
+                    return true;
+                }
+                return false;
+            }
+
+        });
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
 
@@ -129,11 +152,11 @@ public class ChartActivity extends AppCompatActivity {
         graphLayoutRight.addView(mPieRight);
 
         ViewGroup.LayoutParams params = mPieLeft.getLayoutParams();
-        params.height = 400;
+        params.height = 450;
         params.width = 450;
 
         ViewGroup.LayoutParams paramsRight = mPieRight.getLayoutParams();
-        paramsRight.height = 400;
+        paramsRight.height = 450;
         paramsRight.width = 450;
 
         preparePieChartData2(mPieLeft, childListLeft, "left");
@@ -145,6 +168,10 @@ public class ChartActivity extends AppCompatActivity {
     }
 
 
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     public void createCharts(){
         mPieLeft = createPieChart();
@@ -259,25 +286,6 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    /*private ArrayList<Child> filterChild(String position){
-        filteredList = new ArrayList<>();
-        int regionNum;
-        if(position.equals("left")){
-            regionNum = leftFilterNum;
-        }
-        else regionNum = rightFilterNum;
-
-        for(int i = 0; i < childList.size(); i++){
-            if(regionNum == childList.get(i).getRegionNum()){
-                filteredList.add(childList.get(i));
-            }
-        }
-
-        return filteredList;
-
-
-    }*/
-
     private PieChart createPieChart(){
 
         PieChart pieChart = new PieChart(this);
@@ -320,18 +328,27 @@ public class ChartActivity extends AppCompatActivity {
         String[] pieLabels = questionList.get(questionNum).getFeatureText().toArray(new String[0]);
 
         ValueCounter valueCounter = new ValueCounter(childList, questionNum, questionList);
-        valueCounter.setResponse();
+
+        if(test.equals("left")){
+            leftDetails.setText("Female Dataset - Total Pop: " + childListLeft.size());
+        }
+        else if(test.equals("right")){
+            rightDetails.setText("Male Dataset - Total Pop: " + childListRight.size());
+        }
+
+        //valueCounter.setResponse();
         int[] pieCount = valueCounter.getResponse();
+        int pieTotal = 0;
         answerCount = valueCounter.getGroup();
 
         ArrayList<Float> pieValues = computeValue2(childList, test, pieCount, answerCount);
-
 
         Log.d("valuesize", Integer.toString(pieValues.size()));
         for(int i = 0; i < pieValues.size(); i++){
             Log.d("Pie Values", pieValues.get(i).toString());
 
             pieEntries.add(new PieEntry(pieValues.get(i), pieLabels[i] + "(" + pieCount[i] + ")"));
+            pieTotal += pieCount[i];
 
         }
         String label = questionList.get(questionNum).getQuestionLabel();
@@ -358,8 +375,12 @@ public class ChartActivity extends AppCompatActivity {
         data.setValueTextSize(18f);
         data.setValueTextColor(Color.BLACK);
         pieChart.setData(data);
+
         Description description = new Description();
-        description.setText("");
+        description.setText("Pie n: " + pieTotal);
+        description.setTextSize(16.0f);
+        description.setPosition(85f, 300f);
+
         pieChart.setDescription(description);
         pieChart.animateXY(1500, 1500);
         pieChart.invalidate();
@@ -424,8 +445,8 @@ public class ChartActivity extends AppCompatActivity {
 
         Log.d("cls", Double.toString(childLeftSize));
         Log.d("crs", Double.toString(childRightSize));
-        Log.d("ld", Double.toString(leftDouble));
-        Log.d("rd", Double.toString(rightDouble));
+        Log.d("ldtest", Double.toString(leftDouble));
+        Log.d("rdtest", Double.toString(rightDouble));
 
         Log.d("childListsize", "Left: " + Integer.toString(childListLeft.size()) + " and Right: " + Integer.toString(childListRight.size()));
         double pHat = ((childLeftSize * leftDouble) + (childRightSize * rightDouble)) / (childLeftSize + childRightSize);
@@ -462,6 +483,26 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
+    public void findQuestion(String questionCode){
+        //TODO fix variable naming
+        boolean isFound = false;
+        for(int i = 0; i < questionList.size(); i++){
+            if(questionList.get(i).getQuestionLabel().equals(questionCode)){
+                isFound = true;
+                questionNum = i;
+                questionDesc.setText(": "+ questionList.get(questionNum).getQuestionText());
+                preparePieChartData2(mPieLeft, childListLeft, "left");
+                preparePieChartData2(mPieRight, childListRight, "right");
+                computeChiStat();
+                break;
+            }
+        }
+        if(!isFound){
+            Toast.makeText(ChartActivity.this, "Question not found!", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     public void prevView(View view) {
         questionNum--;
         if(questionNum < 0){
@@ -487,6 +528,7 @@ public class ChartActivity extends AppCompatActivity {
             questionNum = 0;
         }
         //questionText.setText("Question " + questionList.get(questionNum).getQuestionLabel() + ": " + questionList.get(questionNum).getQuestionText());
+        questionCode.setText(questionList.get(questionNum).getQuestionLabel());
         questionDesc.setText(": "+ questionList.get(questionNum).getQuestionText());
 
 
