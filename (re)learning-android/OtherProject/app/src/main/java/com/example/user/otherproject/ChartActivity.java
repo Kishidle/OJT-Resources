@@ -209,8 +209,15 @@ public class ChartActivity extends AppCompatActivity {
 
                     ArrayList<String> childResponses = new ArrayList<>();
                     for(int i = 1; i < col.length; i++){
-                        childResponses.add(col[i].trim());
+
+                        String response = col[i].trim();
+                        if(response.equals("#NULL!")){
+                            response = "-1";
+                        }
+
+                        childResponses.add(response);
                     }
+
                     child.setChildResponses(childResponses);
                     childList.add(child);
                 }
@@ -311,6 +318,7 @@ public class ChartActivity extends AppCompatActivity {
 
         // customize legends
         Legend l = pieChart.getLegend();
+        pieChart.setEntryLabelColor(getResources().getColor(R.color.black));
 
         l.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
         //l.setTextSize(16);
@@ -366,6 +374,12 @@ public class ChartActivity extends AppCompatActivity {
             }
         }
         PieDataSet set = new PieDataSet(pieEntries, "");
+
+        set.setValueLinePart1OffsetPercentage(80.f);
+        set.setValueLinePart1Length(0.2f);
+        set.setValueLinePart2Length(0.4f);
+        //dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
 
         set.setSliceSpace(4f);

@@ -91,7 +91,7 @@ public class MainMenu extends AppCompatActivity {
         chooseFile.setType("*");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);*/
-        fileCSVLeft = "female_p_test_800.csv";
+        fileCSVLeft = "another_female.csv";
         childListLeft = new ArrayList<>();
         prepareData(fileCSVLeft, childListLeft);
 
@@ -100,7 +100,7 @@ public class MainMenu extends AppCompatActivity {
         /*
         Loads hard-coded file from the right dataset button
          */
-        fileCSVRight = "male_p_test_800.csv";
+        fileCSVRight = "another_male.csv";
         childListRight = new ArrayList<>();
         prepareData(fileCSVRight, childListRight);
     }
@@ -161,7 +161,7 @@ public class MainMenu extends AppCompatActivity {
         //chooseFile = Intent.createChooser(chooseFile, "Choose a file");
         //startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
         //TODO load files from cloud
-        featureCSV = "InitialVarDescTempTemp.csv";
+        featureCSV = "another_desc.csv";
         AssetManager manager = this.getAssets();
         InputStream inStream = null;
         try{

@@ -2154,17 +2154,17 @@ b,4, Often
 b,5, Very often
 x,6, Prefer not to say
 ^,h1,Here is a picture of a ladder. The top of the ladder ‘10’ is the best possible life for you and the bottom ‘0’ is the worst possible life for you. In general; where on the ladder do you feel you stand at the moment? Mark the circle next to the number that best describes where you stand.
-a,0, 0
-a,1, 1
-a,2, 2
-a,3, 3
-a,4, 4
-b,5, 5
-b,6, 6
-b,7, 7
-b,8, 8
-b,9, 9
-b,10, 10
+a,0,0
+a,1,1
+a,2,2
+a,3,3
+a,4,4
+b,5,5
+b,6,6
+b,7,7
+b,8,8
+b,9,9
+b,10,10
 ^,h2a,Your mother or father (including step/foster mother or father)
 a,0, No
 b,1, Yes
