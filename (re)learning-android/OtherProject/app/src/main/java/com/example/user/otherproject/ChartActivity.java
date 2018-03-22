@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -60,7 +61,8 @@ public class ChartActivity extends AppCompatActivity {
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
     private int leftFilterNum, rightFilterNum;
-    private TextView questionText, resultText;
+    private TextView resultText, questionDesc;
+    private EditText questionCode;
     private View colorBar;
     private Question question;
     private int questionNum = 0;
@@ -104,8 +106,12 @@ public class ChartActivity extends AppCompatActivity {
         questionLabel = questionList.get(0).getQuestionLabel();
         questionString = questionList.get(0).getQuestionText();
         //preliminary set question text
-        questionText = (TextView) findViewById(R.id.question_text);
-        questionText.setText("Question " + questionLabel + ": " + questionString);
+        questionDesc = (TextView) findViewById(R.id.question_desc);
+        questionCode = (EditText) findViewById(R.id.question_code);
+
+        questionCode.setText(questionLabel);
+
+        questionDesc.setText(": "+ questionString);
 
         resultText = (TextView) findViewById(R.id.result_text);
 
@@ -416,6 +422,11 @@ public class ChartActivity extends AppCompatActivity {
         double leftDouble = (double) yesLeft / childLeftSize;
         double rightDouble = (double) yesRight / childRightSize;
 
+        Log.d("cls", Double.toString(childLeftSize));
+        Log.d("crs", Double.toString(childRightSize));
+        Log.d("ld", Double.toString(leftDouble));
+        Log.d("rd", Double.toString(rightDouble));
+
         Log.d("childListsize", "Left: " + Integer.toString(childListLeft.size()) + " and Right: " + Integer.toString(childListRight.size()));
         double pHat = ((childLeftSize * leftDouble) + (childRightSize * rightDouble)) / (childLeftSize + childRightSize);
         double sep = Math.sqrt((pHat * (1 - pHat)) * (1 / childLeftSize + 1 / childRightSize));
@@ -433,6 +444,7 @@ public class ChartActivity extends AppCompatActivity {
         //TODO searching of question
         //TODO filter in main menu
         double zRound = Math.round(z * 100.00) / 100.00;
+        Log.d("zround", Double.toString(zRound));
         if(zRound <= 2.58){ // 99% confidence interval
             resultText.setText("Z-score: " + Double.toString(zRound) + " -Within Normal Bounds- at 99% confidence interval");
         }
@@ -455,7 +467,9 @@ public class ChartActivity extends AppCompatActivity {
         if(questionNum < 0){
             questionNum = questionList.size() - 1;
         }
-        questionText.setText("Question " + questionList.get(questionNum).getQuestionLabel() + ": " + questionList.get(questionNum).getQuestionText());
+        //questionText.setText("Question " + questionList.get(questionNum).getQuestionLabel() + ": " + questionList.get(questionNum).getQuestionText());
+        questionCode.setText(questionList.get(questionNum).getQuestionLabel());
+        questionDesc.setText(": "+ questionList.get(questionNum).getQuestionText());
          //green color
 
         preparePieChartData2(mPieLeft, childListLeft, "left");
@@ -472,7 +486,8 @@ public class ChartActivity extends AppCompatActivity {
         if(questionNum >= questionList.size()){
             questionNum = 0;
         }
-        questionText.setText("Question " + questionList.get(questionNum).getQuestionLabel() + ": " + questionList.get(questionNum).getQuestionText());
+        //questionText.setText("Question " + questionList.get(questionNum).getQuestionLabel() + ": " + questionList.get(questionNum).getQuestionText());
+        questionDesc.setText(": "+ questionList.get(questionNum).getQuestionText());
 
 
         preparePieChartData2(mPieLeft, childListLeft, "left");

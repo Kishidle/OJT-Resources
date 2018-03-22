@@ -44,5 +44,5 @@
     <string name="load_dataset2">Load Dataset 2</string>
     <string name="view_database">DB Visualization</string>
     <string name="question_text">Question </string>
-
+    <string name="question_search">Search</string>
 </resources>
