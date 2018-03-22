@@ -3,6 +3,7 @@ package com.example.user.otherproject;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -467,10 +468,14 @@ public class ChartActivity extends AppCompatActivity {
         double zRound = Math.round(z * 100.00) / 100.00;
         Log.d("zround", Double.toString(zRound));
         if(zRound <= 2.58){ // 99% confidence interval
-            resultText.setText("Z-score: " + Double.toString(zRound) + " -Within Normal Bounds- at 99% confidence interval");
+            resultText.setText("Z-score: " + Double.toString(zRound) + " Within Normal Bounds at 99% confidence interval");
+            resultText.setTextColor(getResources().getColor(R.color.black));
+            resultText.setTypeface(null, Typeface.NORMAL);
         }
         else if(zRound > 2.58){
-            resultText.setText("Z-score: " + Double.toString(zRound) + " -Out of the Ordinary(OOTO)- at 99% confidence interval");
+            resultText.setText("Z-score: " + Double.toString(zRound) + " Out of the Ordinary(OOTO) at 99% confidence interval");
+            resultText.setTextColor(getResources().getColor(R.color.red));
+            resultText.setTypeface(null, Typeface.BOLD);
 
         }
 
