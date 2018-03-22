@@ -16,6 +16,7 @@ public class ValueCounter {
     private int questionNum;
     private ArrayList<Question> questionList;
 
+
     public ValueCounter(ArrayList<Child> childList, int questionNum, ArrayList<Question> questionList){
         this.childList = childList;
         this.questionNum = questionNum;
@@ -28,7 +29,8 @@ public class ValueCounter {
         for(int i = 0; i < childList.size(); i++){
             Log.d("valuecounterchart", childList.get(i).getChildResponses().get(questionNum));
             for(int j = 0; j < questionList.get(questionNum).getFeatureNum().size(); j++){
-                if(Integer.parseInt(childList.get(i).getChildResponses().get(questionNum)) == questionList.get(questionNum).getFeatureNum().get(j)){
+                int childAnswer = Integer.parseInt(childList.get(i).getChildResponses().get(questionNum));
+                if(childAnswer == questionList.get(questionNum).getFeatureNum().get(j)){
                     valResponse[j]++;
                     if(questionList.get(questionNum).getFeatureGroup().get(j).equals("a")){
                         valGroup[0]++;
@@ -37,6 +39,7 @@ public class ValueCounter {
                         valGroup[1]++;
                     }
                 }
+
             }
 
         }
