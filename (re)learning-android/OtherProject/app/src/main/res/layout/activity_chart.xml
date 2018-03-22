@@ -91,7 +91,6 @@
                          android:id="@+id/leftDetails"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
-                         android:layout_centerHorizontal="true"
                          android:text="Test"/>
 
                  </RelativeLayout>
@@ -105,7 +104,6 @@
                          android:id="@+id/rightDetails"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
-                         android:layout_centerHorizontal="true"
                          android:text="testing2"/>
 
                  </RelativeLayout>

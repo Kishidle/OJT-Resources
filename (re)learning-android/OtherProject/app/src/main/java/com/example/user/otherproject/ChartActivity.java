@@ -372,6 +372,12 @@ public class ChartActivity extends AppCompatActivity {
 
                 colorList.add(getResources().getColor(R.color.blue));
             }
+            else if(questionList.get(questionNum).getFeatureGroup().get(i).equals("c")){
+                colorList.add(getResources().getColor(R.color.red));
+            }
+            else if(questionList.get(questionNum).getFeatureGroup().get(i).equals("x")){
+                colorList.add(getResources().getColor(R.color.yellow));
+            }
         }
         PieDataSet set = new PieDataSet(pieEntries, "");
 
