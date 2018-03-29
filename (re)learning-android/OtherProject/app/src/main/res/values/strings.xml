@@ -46,5 +46,5 @@
     <string name="question_text">Question </string>
     <string name="question_search">Search</string>
     <string name="message_string">Note: Pie charts\' "n" do not include invalidated records</string>
-    <string name="zscore_note">Z-score is only based on the proportions of class "B"</string>
+    <string name="zscore_note">Z-score is only based on the proportions of class "A"</string>
 </resources>

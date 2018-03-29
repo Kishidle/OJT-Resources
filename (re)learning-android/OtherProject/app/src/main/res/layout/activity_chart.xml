@@ -172,12 +172,14 @@
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_centerHorizontal="true"
+                         android:textSize="16sp"
                          android:text="@string/message_string" />
 
                      <TextView
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_centerHorizontal="true"
+                         android:textSize="16sp"
                          android:text="@string/zscore_note"/>
 
                  </LinearLayout>

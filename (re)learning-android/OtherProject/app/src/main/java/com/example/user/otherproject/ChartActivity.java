@@ -12,13 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,22 +22,13 @@ import com.example.user.otherproject.Controller.DBHelper;
 import com.example.user.otherproject.Model.Child;
 import com.example.user.otherproject.Model.Question;
 import com.example.user.otherproject.Model.ValueCounter;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -73,8 +59,9 @@ public class ChartActivity extends AppCompatActivity {
     private int questionNum = 0;
     private int totalCount = 0;
     private ValueCounter vCountLeft, vCountRight;
-    private int yesLeft, yesRight;
+    private int classValueLeft, classValueRight;
     private int[] answerCount;
+    private int pieTotalLeft, pieTotalRight;
 
 
 
@@ -338,12 +325,7 @@ public class ChartActivity extends AppCompatActivity {
 
         ValueCounter valueCounter = new ValueCounter(childList, questionNum, questionList);
 
-        if(test.equals("left")){
-            leftDetails.setText("Female Dataset - Total Pop: " + childListLeft.size());
-        }
-        else if(test.equals("right")){
-            rightDetails.setText("Male Dataset - Total Pop: " + childListRight.size());
-        }
+
 
         //valueCounter.setResponse();
         int[] pieCount = valueCounter.getResponse();
@@ -360,23 +342,38 @@ public class ChartActivity extends AppCompatActivity {
             pieTotal += pieCount[i];
 
         }
+
+        if(test.equals("left")){
+            leftDetails.setText("Female Dataset - Total Pop: " + childListLeft.size());
+            pieTotalLeft = pieTotal;
+        }
+        else if(test.equals("right")){
+            rightDetails.setText("Male Dataset - Total Pop: " + childListRight.size());
+            pieTotalRight = pieTotal;
+        }
+
         String label = questionList.get(questionNum).getQuestionLabel();
         ArrayList<Integer> colorList = new ArrayList<>();
         for(int i = 0; i < questionList.get(questionNum).getFeatureNum().size(); i++){
             if(questionList.get(questionNum).getFeatureGroup().get(i).equals("a")){
                 Log.d("doesitgoherepls", "test");
 
-                colorList.add(getResources().getColor(R.color.green));
+                colorList.add(getResources().getColor(R.color.red));
+
             }
             else if(questionList.get(questionNum).getFeatureGroup().get(i).equals("b")){
 
-                colorList.add(getResources().getColor(R.color.blue));
+                colorList.add(getResources().getColor(R.color.yellow));
+
+
             }
             else if(questionList.get(questionNum).getFeatureGroup().get(i).equals("c")){
-                colorList.add(getResources().getColor(R.color.red));
+
+                colorList.add(getResources().getColor(R.color.green));
             }
             else if(questionList.get(questionNum).getFeatureGroup().get(i).equals("x")){
-                colorList.add(getResources().getColor(R.color.yellow));
+
+                colorList.add(getResources().getColor(R.color.blue));
             }
         }
         PieDataSet set = new PieDataSet(pieEntries, "");
@@ -400,7 +397,7 @@ public class ChartActivity extends AppCompatActivity {
         Description description = new Description();
         description.setText("Pie n: " + pieTotal);
         description.setTextSize(16.0f);
-        description.setPosition(85f, 300f);
+        description.setPosition(85f, 275f);
 
         pieChart.setDescription(description);
         pieChart.animateXY(1500, 1500);
@@ -412,11 +409,11 @@ public class ChartActivity extends AppCompatActivity {
         totalCount = 0;
 
         if(test.equals("left"))
-            yesLeft = answerCount[1];
+            classValueLeft = answerCount[0];
         else if(test.equals("right")){
-            yesRight = answerCount[1];
+            classValueRight = answerCount[0];
         }
-        Log.d("z-test2", Integer.toString(valueCount[1]));
+        //Log.d("z-test2", Integer.toString(valueCount[1]));
 
         ArrayList<Float> computedValues = new ArrayList<>();
         for(int i = 0; i < valueCount.length; i++){
@@ -457,12 +454,12 @@ public class ChartActivity extends AppCompatActivity {
     private void computeChiStat(){
 
 
-        Log.d("z-value test", Integer.toString(yesLeft));
-        Log.d("z-valuetest2", Integer.toString(yesRight));
-        double childLeftSize = (double) childListLeft.size();
-        double childRightSize = (double) childListRight.size();
-        double leftDouble = (double) yesLeft / childLeftSize;
-        double rightDouble = (double) yesRight / childRightSize;
+        Log.d("z-value test", Integer.toString(classValueLeft));
+        Log.d("z-valuetest2", Integer.toString(classValueRight));
+        double childLeftSize = (double) pieTotalLeft;
+        double childRightSize = (double) pieTotalRight;
+        double leftDouble = (double) classValueLeft / childLeftSize;
+        double rightDouble = (double) classValueRight / childRightSize;
 
         Log.d("cls", Double.toString(childLeftSize));
         Log.d("crs", Double.toString(childRightSize));
