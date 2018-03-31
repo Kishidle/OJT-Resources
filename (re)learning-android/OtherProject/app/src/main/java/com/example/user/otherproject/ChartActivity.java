@@ -484,6 +484,7 @@ public class ChartActivity extends AppCompatActivity {
         //TODO filter in main menu
         double zRound = Math.round(z * 100.00) / 100.00;
         Log.d("zround", Double.toString(zRound));
+        //TODO spinner for confidence interval
         if(zRound <= 2.58){ // 99% confidence interval
             resultText.setText("Z-score: " + Double.toString(zRound) + " Within Normal Bounds at 99% confidence interval");
             resultText.setTextColor(getResources().getColor(R.color.black));
