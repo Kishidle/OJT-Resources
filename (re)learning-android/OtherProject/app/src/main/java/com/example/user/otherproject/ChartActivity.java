@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +64,7 @@ public class ChartActivity extends AppCompatActivity {
     private int classValueLeft, classValueRight;
     private int[] answerCount;
     private int pieTotalLeft, pieTotalRight;
+    private Spinner confSpinner;
 
 
 
@@ -128,6 +131,11 @@ public class ChartActivity extends AppCompatActivity {
         });
         graphLayoutLeft = (RelativeLayout) findViewById(R.id.graph_container_left);
         graphLayoutRight = (RelativeLayout) findViewById(R.id.graph_container_right);
+
+        confSpinner = (Spinner) findViewById(R.id.conf_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.conf_array, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        confSpinner.setAdapter(adapter);
 
         pieEntries1 = new ArrayList<>();
         pieEntries2 = new ArrayList<>();
