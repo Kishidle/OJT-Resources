@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -49,7 +50,7 @@ public class ChartActivity extends AppCompatActivity {
     private ArrayList<PieEntry> pieEntries2;
     private ArrayList<Question> questionList;
     private RelativeLayout graphLayoutLeft, graphLayoutRight;
-    private String xData, xDataRight, questionLabel, questionString;
+    private String xData, xDataRight, questionLabel, questionString, confInterval;
     private int[] yDataLeft, yDataRight;
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
@@ -136,6 +137,18 @@ public class ChartActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.conf_array, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         confSpinner.setAdapter(adapter);
+
+        confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+           @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l){
+               confInterval = confSpinner.getSelectedItem().toString();
+
+           }
+           @Override
+            public void onNothingSelected(AdapterView<?> adapterView){
+
+           }
+        });
 
         pieEntries1 = new ArrayList<>();
         pieEntries2 = new ArrayList<>();
@@ -352,11 +365,11 @@ public class ChartActivity extends AppCompatActivity {
         }
 
         if(test.equals("left")){
-            leftDetails.setText("Female Dataset - Total Pop: " + childListLeft.size());
+            leftDetails.setText("Female Dataset - N: " + childListLeft.size());
             pieTotalLeft = pieTotal;
         }
         else if(test.equals("right")){
-            rightDetails.setText("Male Dataset - Total Pop: " + childListRight.size());
+            rightDetails.setText("Male Dataset - N: " + childListRight.size());
             pieTotalRight = pieTotal;
         }
 
@@ -403,7 +416,7 @@ public class ChartActivity extends AppCompatActivity {
         pieChart.setData(data);
 
         Description description = new Description();
-        description.setText("Pie n: " + pieTotal);
+        description.setText("n: " + pieTotal);
         description.setTextSize(16.0f);
         description.setPosition(85f, 275f);
 
@@ -468,6 +481,7 @@ public class ChartActivity extends AppCompatActivity {
         double childRightSize = (double) pieTotalRight;
         double leftDouble = (double) classValueLeft / childLeftSize;
         double rightDouble = (double) classValueRight / childRightSize;
+        double confValue = 0.00;
 
         Log.d("cls", Double.toString(childLeftSize));
         Log.d("crs", Double.toString(childRightSize));
@@ -492,14 +506,21 @@ public class ChartActivity extends AppCompatActivity {
         //TODO filter in main menu
         double zRound = Math.round(z * 100.00) / 100.00;
         Log.d("zround", Double.toString(zRound));
+        if(confInterval.equals("99%")){
+            confValue = 2.58;
+        }
+
+        else if(confInterval.equals("95%")){
+            confValue = 1.96;
+        }
         //TODO spinner for confidence interval
-        if(zRound <= 2.58){ // 99% confidence interval
-            resultText.setText("Z-score: " + Double.toString(zRound) + " Within Normal Bounds at 99% confidence interval");
+        if(zRound <= confValue){ // 99% confidence interval
+            resultText.setText("Z-score: " + Double.toString(zRound) + " Within Normal Bounds at " + confInterval + " confidence interval");
             resultText.setTextColor(getResources().getColor(R.color.black));
             resultText.setTypeface(null, Typeface.NORMAL);
         }
-        else if(zRound > 2.58){
-            resultText.setText("Z-score: " + Double.toString(zRound) + " Out of the Ordinary(OOTO) at 99% confidence interval");
+        else if(zRound > confValue){
+            resultText.setText("Z-score: " + Double.toString(zRound) + " Out of the Ordinary(OOTO) at " + confInterval + " confidence interval");
             resultText.setTextColor(getResources().getColor(R.color.red));
             resultText.setTypeface(null, Typeface.BOLD);
 
