@@ -45,9 +45,12 @@
     <string name="next">Next</string>
     <string name="load_dataset">Load Dataset 1</string>
     <string name="load_dataset2">Load Dataset 2</string>
-    <string name="view_database">DB Visualization</string>
+    <string name="view_database">Dataset Visualization</string>
     <string name="question_text">Question </string>
     <string name="question_search">Search</string>
     <string name="message_string">Note: Pie charts\' "n" do not include invalidated records</string>
-    <string name="zscore_note">Z-score is only based on the proportions of class "A"</string>
+    <string name="zscore_note">Z-score is only based on the proportions of \'red\' slices</string>
+    <string name="filter_ID">Filter ID</string>
+    <string name="filter_group">Filter Group</string>
+    <string name="ooto_mobile">OOTO Mobile</string>
 </resources>

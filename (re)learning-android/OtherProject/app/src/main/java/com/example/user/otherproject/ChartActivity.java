@@ -137,6 +137,7 @@ public class ChartActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.conf_array, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         confSpinner.setAdapter(adapter);
+        confInterval = "99%";
 
         confSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
            @Override

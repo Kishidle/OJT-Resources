@@ -14,35 +14,23 @@
 
         <Space
             android:layout_width="1dp"
-            android:layout_height="120dp" />
-
-        <LinearLayout
+            android:layout_height="60dp" />
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-
-            <Button
-                android:id="@+id/loadDatabase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/load_dataset"
-                android:onClick="loadFileLeft"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/load_dataset2"
-                android:onClick="loadFileRight"/>
-
-
-        </LinearLayout>
-
-
+            android:textSize="56sp"
+            android:text="@string/ooto_mobile"
+            android:layout_gravity="center"/>
         <Space
             android:layout_width="1dp"
-            android:layout_height="40dp" />
+            android:layout_height="60dp" />
+
+        <Button
+            android:id="@+id/addMainDatabase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Add Main Dataset"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -52,8 +40,74 @@
             android:onClick="loadFileFeature"/>
 
         <Space
-            android:layout_width="1dp"
-            android:layout_height="40dp" />
+            android:layout_width="0dp"
+            android:layout_height="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_ID"
+                android:textSize="16sp"/>
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_group"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/filterID"
+                android:layout_width="100dp"
+                android:layout_height="40dp" />
+            <EditText
+                android:layout_width="100dp"
+                android:layout_height="40dp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/filterFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter 1st Dataset"/>
+            <Button
+                android:id="@+id/filterSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter 2nd Dataset"/>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="20dp"/>
 
         <Button
             android:id="@+id/viewDatabase"
@@ -62,6 +116,7 @@
             android:layout_gravity="center"
             android:onClick="launchChartActivity"
             android:text="@string/view_database" />
+
 
 
     </LinearLayout>
