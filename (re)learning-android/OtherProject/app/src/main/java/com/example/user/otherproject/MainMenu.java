@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.otherproject.Model.Child;
@@ -29,11 +30,15 @@ public class MainMenu extends AppCompatActivity {
     private ArrayList<Child> childListLeft, childListRight;
     private Question question;
     private String fileCSVLeft, fileCSVRight, featureCSV;
+    private TextView inputID, inputGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         questionList = new ArrayList<>();
+
+        inputID = (TextView) findViewById(R.id.filterID);
+        inputGroup = (TextView) findViewById(R.id.filterGroup);
     }
 
     //TODO: get database and store, make UI a little bit better/presentable
@@ -104,8 +109,50 @@ public class MainMenu extends AppCompatActivity {
         childListRight = new ArrayList<>();
         prepareData(fileCSVRight, childListRight);
     }
+    public void loadMainDataset(View view, ArrayList<Child> childList){
+        AssetManager manager = this.getAssets();
+        InputStream inStream = null;
+        try{
+            inStream = manager.open("maindataset.csv");
+        } catch(IOException e){
+            e.printStackTrace();
+        }
 
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line = "";
+        boolean isHeader = true;
+        try{
+            while((line = buffer.readLine()) != null){
+                if(isHeader){
+                    isHeader = false;
+                }
+                else{
+                    String[] col = line.split(",");
+                    Child child = new Child();
+                    child.setChildID(col[0].trim());
 
+                    ArrayList<String> childResponses = new ArrayList<>();
+                    for(int i = 1; i < col.length; i++){
+                        childResponses.add(col[i].trim());
+                    }
+                    child.setChildResponses(childResponses);
+                    childList.add(child);
+                }
+
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        
+    }
+    public void filterData(View view, ArrayList<Child> childList){
+
+        String filterID = inputID.getText().toString();
+        String filterGroup = inputGroup.getText().toString();
+
+        //TODO filter childlist using filterID and filterGroup, then put into new childList and put old one into a temp
+        //before submitting to ChartActivity, write the two childlists into csvs with the headers intact
+    }
 
     public void prepareData(String fileCSV, ArrayList<Child> childList){
         /*

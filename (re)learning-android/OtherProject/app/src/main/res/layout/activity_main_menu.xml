@@ -30,7 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add Main Dataset"/>
+            android:text="Add Main Dataset"
+            android:onClick="loadMainDataset"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -78,7 +79,9 @@
                 android:id="@+id/filterID"
                 android:layout_width="100dp"
                 android:layout_height="40dp" />
+
             <EditText
+                android:id="@+id/filterGroup"
                 android:layout_width="100dp"
                 android:layout_height="40dp" />
 
