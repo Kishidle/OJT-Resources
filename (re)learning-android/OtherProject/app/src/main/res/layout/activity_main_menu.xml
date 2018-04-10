@@ -99,12 +99,14 @@
                 android:id="@+id/filterFirst"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filter 1st Dataset"/>
+                android:text="Filter 1st Dataset"
+                android:onClick="prepareLeftFilter"/>
             <Button
                 android:id="@+id/filterSecond"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filter 2nd Dataset"/>
+                android:text="Filter 2nd Dataset"
+                android:onClick="prepareRightFilter"/>
 
         </LinearLayout>
 

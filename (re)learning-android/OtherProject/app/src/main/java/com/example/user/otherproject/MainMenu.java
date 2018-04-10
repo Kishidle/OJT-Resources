@@ -16,6 +16,7 @@ import com.example.user.otherproject.Model.Child;
 import com.example.user.otherproject.Model.Question;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,8 +28,9 @@ public class MainMenu extends AppCompatActivity {
     private Uri uri;
     private String src;
     private ArrayList<Question> questionList;
-    private ArrayList<Child> childListLeft, childListRight;
+    private ArrayList<Child> childListLeft, childListRight, tempListLeft, tempListRight;
     private Question question;
+    private ArrayList<Question> questionMain, questionTempLeft, questionTempRight;
     private String fileCSVLeft, fileCSVRight, featureCSV;
     private TextView inputID, inputGroup;
     @Override
@@ -75,10 +77,14 @@ public class MainMenu extends AppCompatActivity {
         return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
     }
 
+
+
     public void launchChartActivity(View view){
+        writeListToFile(childListLeft, questionList, "Dataset 1.csv");
+        writeListToFile(childListRight, questionList, "Dataset 2.csv");
         Intent intent = new Intent(this, ChartActivity.class);
-        intent.putExtra("listLeft", fileCSVLeft);
-        intent.putExtra("listRight", fileCSVRight);
+        intent.putExtra("listLeft", "Dataset 1");
+        intent.putExtra("listRight", "Dataset 2");
         intent.putExtra("featureList", featureCSV);
         //intent.putExtra("listLeft", childListLeft);
         //ntent.putExtra("listRight", childListRight);
@@ -109,7 +115,8 @@ public class MainMenu extends AppCompatActivity {
         childListRight = new ArrayList<>();
         prepareData(fileCSVRight, childListRight);
     }
-    public void loadMainDataset(View view, ArrayList<Child> childList){
+    public void loadMainDataset(View view){
+        ArrayList<Child> childList = new ArrayList<>();
         AssetManager manager = this.getAssets();
         InputStream inStream = null;
         try{
@@ -143,15 +150,44 @@ public class MainMenu extends AppCompatActivity {
         } catch(IOException e){
             e.printStackTrace();
         }
+        childListLeft = childList;
+        childListRight = childList;
         
     }
-    public void filterData(View view, ArrayList<Child> childList){
+
+    public void prepareLeftFilter(View view){
+
+        filterData(childListLeft, tempListLeft, "left");
+    }
+    public void prepareRightFilter(View view){
+
+        filterData(childListRight, tempListRight, "right");
+    }
+
+    public void filterData(ArrayList<Child> childList, ArrayList<Child> tempList, String position){
 
         String filterID = inputID.getText().toString();
         String filterGroup = inputGroup.getText().toString();
+        int questionNum = 0;
 
         //TODO filter childlist using filterID and filterGroup, then put into new childList and put old one into a temp
         //before submitting to ChartActivity, write the two childlists into csvs with the headers intact
+        for(int i = 0; i < questionList.size(); i++){
+            if(questionList.get(i).getQuestionLabel().equals(filterID)){
+                questionNum = i;
+                break;
+            }
+        }
+        for(int i = 0; i < childList.size(); i++){
+            for(int j = 0; j < questionList.get(questionNum).getFeatureGroup().size(); j++){
+                if(questionList.get(questionNum).getFeatureGroup().get(j).equals(filterGroup) && questionList.get(questionNum).getFeatureNum().get(j).equals(childList.get(i).getChildResponses().get(questionNum))){
+
+                    tempList.add(childList.get(i));
+                }
+            }
+        }
+        childList = tempList;
+        Toast.makeText(MainMenu.this, "Filtering complete! Resulting n: " + childList.size(), Toast.LENGTH_LONG).show();
     }
 
     public void prepareData(String fileCSV, ArrayList<Child> childList){
@@ -195,6 +231,36 @@ public class MainMenu extends AppCompatActivity {
         }
 
         Toast.makeText(MainMenu.this, "Added dataset!", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void writeListToFile(ArrayList<Child> childList, ArrayList<Question> questionList, String filename){
+
+        try{
+            FileWriter writer = new FileWriter(filename);
+            writer.append("Respondents");
+            writer.append(',');
+            for(int i = 0; i < questionList.size(); i++){
+                writer.append(questionList.get(i).getQuestionLabel());
+                writer.append(',');
+            }
+            writer.append('\n');
+            for(int i = 0; i < childList.size(); i++){
+                writer.append(childList.get(i).getChildID());
+                writer.append(',');
+                for(int j = 0; j < childList.get(i).getChildResponses().size(); j++){
+                    writer.append(childList.get(i).getChildResponses().get(j));
+                    writer.append(',');
+                }
+                writer.append('\n');
+            }
+            writer.flush();
+            writer.close();
+
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
 
     }
 
