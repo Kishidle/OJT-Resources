@@ -16,6 +16,7 @@ import com.example.user.otherproject.Model.Child;
 import com.example.user.otherproject.Model.Question;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ public class MainMenu extends AppCompatActivity {
     private Uri uri;
     private String src;
     private ArrayList<Question> questionList;
-    private ArrayList<Child> childListLeft, childListRight, tempListLeft, tempListRight;
+    private ArrayList<Child> childListLeft, childListRight, prevListLeft, prevListRight;
     private Question question;
     private ArrayList<Question> questionMain, questionTempLeft, questionTempRight;
     private String fileCSVLeft, fileCSVRight, featureCSV;
@@ -38,6 +39,8 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         questionList = new ArrayList<>();
+        prevListLeft = new ArrayList<>();
+        prevListRight = new ArrayList<>();
 
         inputID = (TextView) findViewById(R.id.filterID);
         inputGroup = (TextView) findViewById(R.id.filterGroup);
@@ -80,16 +83,16 @@ public class MainMenu extends AppCompatActivity {
 
 
     public void launchChartActivity(View view){
-        writeListToFile(childListLeft, questionList, "Dataset 1.csv");
-        writeListToFile(childListRight, questionList, "Dataset 2.csv");
-        Intent intent = new Intent(this, ChartActivity.class);
-        intent.putExtra("listLeft", "Dataset 1");
-        intent.putExtra("listRight", "Dataset 2");
-        intent.putExtra("featureList", featureCSV);
+        writeListToFile(childListLeft, questionList, "Dataset_1.csv");
+        writeListToFile(childListRight, questionList, "Dataset_2.csv");
+        //Intent intent = new Intent(this, ChartActivity.class);
+        //intent.putExtra("listLeft", "Dataset 1");
+        //intent.putExtra("listRight", "Dataset 2");
+        //intent.putExtra("featureList", featureCSV);
         //intent.putExtra("listLeft", childListLeft);
         //ntent.putExtra("listRight", childListRight);
         //intent.putExtra("questionList", questionList);
-        startActivity(intent);
+        //startActivity(intent);
     }
 
 
@@ -120,7 +123,7 @@ public class MainMenu extends AppCompatActivity {
         AssetManager manager = this.getAssets();
         InputStream inStream = null;
         try{
-            inStream = manager.open("maindataset.csv");
+            inStream = manager.open("another_male.csv");
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -152,20 +155,24 @@ public class MainMenu extends AppCompatActivity {
         }
         childListLeft = childList;
         childListRight = childList;
+        Toast.makeText(MainMenu.this, "Added main dataset! Total n: " + Integer.toString(childList.size()), Toast.LENGTH_LONG).show();
         
     }
 
     public void prepareLeftFilter(View view){
 
-        filterData(childListLeft, tempListLeft, "left");
+        filterData(childListLeft, prevListLeft, "left");
     }
     public void prepareRightFilter(View view){
 
-        filterData(childListRight, tempListRight, "right");
+        filterData(childListRight, prevListRight, "right");
     }
 
-    public void filterData(ArrayList<Child> childList, ArrayList<Child> tempList, String position){
+    public void filterData(ArrayList<Child> childList, ArrayList<Child> prevList, String position){
 
+        //TODO pass filename to visualization
+        //TODO checks if questionNum exists, or group exists. If none, then don't go through with the filtering
+        ArrayList<Child> tempList = new ArrayList<>();
         String filterID = inputID.getText().toString();
         String filterGroup = inputGroup.getText().toString();
         int questionNum = 0;
@@ -175,19 +182,31 @@ public class MainMenu extends AppCompatActivity {
         for(int i = 0; i < questionList.size(); i++){
             if(questionList.get(i).getQuestionLabel().equals(filterID)){
                 questionNum = i;
+                Log.d("questionNumFilter", Integer.toString(questionNum));
                 break;
             }
         }
         for(int i = 0; i < childList.size(); i++){
             for(int j = 0; j < questionList.get(questionNum).getFeatureGroup().size(); j++){
-                if(questionList.get(questionNum).getFeatureGroup().get(j).equals(filterGroup) && questionList.get(questionNum).getFeatureNum().get(j).equals(childList.get(i).getChildResponses().get(questionNum))){
-
+                Log.d("firstcompare", filterGroup + " = " + questionList.get(questionNum).getFeatureGroup().get(j));
+                Log.d("secondcompare", Integer.toString(questionList.get(questionNum).getFeatureNum().get(j)) + " = " + childList.get(i).getChildResponses().get(questionNum));
+                if(questionList.get(questionNum).getFeatureGroup().get(j).equals(filterGroup) && Integer.toString(questionList.get(questionNum).getFeatureNum().get(j)).equals(childList.get(i).getChildResponses().get(questionNum))){
+                    Log.d("itwentthereWO", "it went here!");
                     tempList.add(childList.get(i));
                 }
             }
         }
-        childList = tempList;
-        Toast.makeText(MainMenu.this, "Filtering complete! Resulting n: " + childList.size(), Toast.LENGTH_LONG).show();
+        //tempList.add(childList.get(0));
+        if(position.equals("left")) {
+            prevListLeft = childListLeft;
+            childListLeft = tempList;
+        }
+        else if(position.equals("right")){
+            prevListRight = childListRight;
+            childListRight = tempList;
+        }
+
+        Toast.makeText(MainMenu.this, "Filtering complete! Resulting n: " + tempList.size(), Toast.LENGTH_LONG).show();
     }
 
     public void prepareData(String fileCSV, ArrayList<Child> childList){
@@ -236,15 +255,27 @@ public class MainMenu extends AppCompatActivity {
 
     public void writeListToFile(ArrayList<Child> childList, ArrayList<Question> questionList, String filename){
 
+        File root = android.os.Environment.getExternalStorageDirectory();
+        Log.d("root", root.toString());
+
+        File dir = new File(root.getAbsolutePath() + "/OOTOMobile");
+        dir.mkdir();
+        File file = new File(dir, filename);
         try{
-            FileWriter writer = new FileWriter(filename);
+            FileWriter writer = new FileWriter(file, false);
             writer.append("Respondents");
             writer.append(',');
             for(int i = 0; i < questionList.size(); i++){
+                Log.d("questioni", Integer.toString(i));
+                Log.d("questionListSize", Integer.toString(questionList.size()));
+                Log.d("questionLabel", questionList.get(i).getQuestionLabel());
                 writer.append(questionList.get(i).getQuestionLabel());
-                writer.append(',');
+                if(!(i + 1 == questionList.size())){
+                    writer.append(',');
+                }
+
             }
-            writer.append('\n');
+            writer.append("\n");
             for(int i = 0; i < childList.size(); i++){
                 writer.append(childList.get(i).getChildID());
                 writer.append(',');
@@ -303,18 +334,21 @@ public class MainMenu extends AppCompatActivity {
                     isFirst = false;
                     question = new Question();
                     question.setQuestionLabel(col[1].trim());
+                    Log.d("questionTest", col[1].trim());
                     question.setQuestionText(col[2].trim());
                     Log.d("questionNum", col[1].trim());
 
                 }
                 else{
                     //new features
-                    //question.setFeatureGroup(col[0].trim());
-                    //question.setFeatureNum(Integer.parseInt(col[1].trim()));
-                    //question.setFeatureText(col[2].trim());
+                    question.addFeatureGroup(col[0].trim());
+                    question.addFeatureNum(Integer.parseInt(col[1].trim()));
+                    question.addFeatureText(col[2].trim());
                 }
 
             }
+            Log.d("qsize", Integer.toString(questionList.size()));
+            questionList.add(question);
         } catch(IOException e){
             e.printStackTrace();
         }
